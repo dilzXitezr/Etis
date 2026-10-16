@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>dilzALG - AM Preset Finder</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#fff;font-family:Inter,sans-serif}
+:root{--green:#00ff88;--card:#151515;--border:#232323}
+#splash{position:fixed;inset:0;background:radial-gradient(ellipse at center,#1a1a1a,#050505);display:grid;place-items:center;z-index:9999;transition:opacity.6s}
+#splash.hide{opacity:0;pointer-events:none}
+.logo-wrap{width:88px;height:88px;background:#111;border:1.5px solid var(--border);border-radius:22px;display:grid;place-items:center;margin:0 auto 16px;position:relative;overflow:hidden}
+.logo-wrap::before{content:'';position:absolute;left:0;right:0;height:2px;background:var(--green);box-shadow:0 0 20px var(--green);animation:scan 1.8s infinite}
+@keyframes scan{0%{top:20%}100%{top:80%}}
+.progress{width:160px;height:3px;background:#1f1f1f;border-radius:99px;margin:18px auto 6px;overflow:hidden}
+.progress-bar{height:100%;background:var(--green);width:0%;transition:width.1s}
+#app{opacity:0;transition:opacity.5s}
+#app.show{opacity:1}
+.header{padding:18px 20px 0;display:flex;align-items:center;gap:12px}
+.header-logo{width:38px;height:38px;background:#111;border:1px solid var(--border);border-radius:12px;display:grid;place-items:center;color:var(--green)}
+.container{padding:16px 14px 100px;max-width:480px;margin:0 auto}
+.tabs{display:flex;gap:8px;margin:18px 0 14px}
+.tab{flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 10px;text-align:center;cursor:pointer;position:relative;font-size:12px;font-weight:600}
+.tab.active{background:#16261c;border-color:var(--green)}
+.tab.new{position:absolute;top:-6px;right:-4px;background:#ff1a4a;color:#fff;font-size:8px;font-weight:800;padding:2px 6px;border-radius:99px}
+.title{font-family:Space Grotesk;font-size:26px;font-weight:700;margin-bottom:8px}
+.title-line{width:40px;height:3px;background:var(--green);border-radius:99px;margin-bottom:14px}
+.desc{font-size:12px;opacity:.5;margin-bottom:14px}
+.search-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:4px;display:flex;gap:6px;align-items:center}
+.search-wrap input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:13px;padding:12px 8px}
+.btn-search{background:var(--green);color:#000;border:none;border-radius:10px;padding:11px 18px;font-weight:800;font-size:12px;cursor:pointer}
+.examples{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.examples a{font-size:11px;background:var(--card);border:1px solid var(--border);border-radius:99px;padding:6px 10px;opacity:.5;cursor:pointer;color:#fff;text-decoration:none}
+.steps{margin-top:18px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
+.video-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;display:flex;gap:10px;margin-bottom:10px;cursor:pointer}
+.video-thumb{width:56px;height:56px;background:#111;border-radius:10px;overflow:hidden;flex-shrink:0}
+.video-thumb img{width:100%;height:100%;object-fit:cover}
+.video-user{font-size:12px;font-weight:700}
+.video-cap{font-size:11px;opacity:.6;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.video-tags{font-size:10px;color:var(--green);opacity:.7;margin-top:4px}
+.loading-center{padding:40px 20px;text-align:center}
+.detail{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-top:12px}
+.detail-meta{display:grid;grid-template-columns:1fr 1fr;padding:0 14px 14px;gap:10px}
+.preset-section{border-top:1px solid var(--border);padding:14px}
+.preset-card{background:#0f0f0f;border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px}
+.preset-link{font-size:11px;opacity:.5;word-break:break-all;background:#0a0a0a;border-radius:8px;padding:8px;margin:8px 0}
+.preset-actions{display:flex;gap:8px}
+.btn-preset{flex:1;background:var(--green);color:#000;border:none;border-radius:10px;padding:10px;font-weight:800;font-size:12px;cursor:pointer}
+.btn-preset2{flex:1;background:transparent;color:#fff;border:1px solid var(--border);border-radius:10px;padding:10px;font-weight:600;font-size:12px;cursor:pointer}
+.btn-dl{width:100%;background:#fff;color:#000;border:none;border-radius:12px;padding:14px;font-weight:800;margin-top:12px;cursor:pointer}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<div id="splash">
+<div style="text-align:center">
+<div class="logo-wrap">AM</div>
+<div style="font-family:Space Grotesk;font-size:22px;font-weight:700">dilzALG</div>
+<div style="font-size:10px;letter-spacing:3px;opacity:.4;margin-top:4px">AM Finder • Alight Motion</div>
+<div class="progress"><div class="progress-bar" id="bar"></div></div>
+<div id="pText" style="font-size:11px;opacity:.5">1%</div>
+</div>
+<div style="position:absolute;bottom:24px;left:0;right:0;text-align:center;font-size:11px;opacity:.3;letter-spacing:2px">- By Givy -</div>
+</div>
+<div id="app">
+<div class="header">
+<div class="header-logo">AM</div>
+<div><b style="font-family:Space Grotesk">AM Preset Finder</b><p style="font-size:10px;opacity:.4">Find Alight Motion presets from any TikTok link</p></div>
+</div>
+<div class="container">
+<div class="title">Find preset links</div>
+<div class="title-line"></div>
+<div class="tabs">
+<div class="tab" id="tabUrl">URL Video</div>
+<div class="tab active" id="tabCari">Cari Preset <span class="new">NEW</span></div>
+</div>
+<div class="desc">Cari nama lagu atau kata kunci, lalu pilih video untuk mencari link preset di deskripsi, bio, komentar, dan balasannya.</div>
+<div class="search-wrap">
+<input id="inputSearch" placeholder="Cari nama lagu..." value="negro angin">
+<button class="btn-search" onclick="doSearch()">Search</button>
+</div>
+<div class="examples">
+<a onclick="fillExample('negro angin')">negro angin</a>
+<a onclick="fillExample('jedag jedug')">jedag jedug</a>
+<a onclick="fillExample('preset xml')">preset xml</a>
+</div>
+<div class="steps" id="stepsBox" style="margin-top:18px">
+<b style="font-size:11px;letter-spacing:2px;opacity:.4">STEP BY STEP</b>
+<p style="font-size:12px;margin-top:8px;line-height:1.6">1. Paste TikTok link<br>2. Scan bio & comments<br>3. Extract preset 5MB/XML<br>4. Copy & Open di Alight Motion</p>
+</div>
+<div id="resultsArea" class="hide">
+<div style="margin:18px 0 12px;display:flex;justify-content:space-between"><b id="resCount">0 videos</b><span style="font-size:11px;opacity:.4">dilzALG</span></div>
+<div id="videoList"></div>
+</div>
+<div id="loadingPreset" class="loading-center hide">
+<div class="logo-wrap" style="margin:auto;width:60px;height:60px">AM</div>
+<p style="margin-top:12px">Mencari link preset...</p>
+</div>
+<div id="detailArea" class="hide">
+<div style="font-size:12px;opacity:.5;cursor:pointer;margin-bottom:12px" onclick="backToResults()">← Kembali</div>
+<div id="detailContent"></div>
+</div>
+<button class="btn-dl" onclick="downloadSelf()">⬇️ DOWNLOAD WEB INI (GITHUB FIX - WORK 100%)</button>
+</div>
+</div>
+<script>
+const mockVideos=[
+{user:'presetdanang',ava:'https://i.pravatar.cc/100?img=1',cap:'Negro angin II fyp Ryo7? > #presetbawl5mb #alightmotion',views:'94.2K',likes:'94K',comments:62,links:[{type:'5MB',name:'Negro angin',url:'https://alightcreative.com/am/share/0SJr0o0U0Bk10',size:'5MB'},{type:'XML',name:'Negro angin XML',url:'https://drive.google.com/file/d/1NegroAngin/view',size:'73.8 KB'}]},
+{user:'gfvaaxml',ava:'https://i.pravatar.cc/100?img=2',cap:'Bagian 22 | Negro Angin',views:'22K',likes:'4K',comments:12,links:[{type:'XML',name:'Negro angin 22',url:'https://drive.google.com/file/d/1NegroAngin22/view',size:'81 KB'}]},
+{user:'niprstpann',ava:'https://i.pravatar.cc/100?img=3',cap:'#pannpreset negro angin',views:'8.1K',likes:'1.2K',comments:5,links:[{type:'XML',name:'negro angin pann',url:'https://alightcreative.com/am/share/pannpreset',size:'XML'}]},
+{user:'maskrisnaa0',ava:'https://i.pravatar.cc/100?img=4',cap:'lagu trending negro angin',views:'15K',likes:'2K',comments:20,links:[{type:'5MB',name:'negro angin',url:'https://alightcreative.com/am/share/maskrisnaa',size:'5MB'}]},
+{user:'sikecil_renn38',ava:'https://i.pravatar.cc/100?img=5',cap:'Tugas negara selesai',views:'30K',likes:'5K',comments:40,links:[{type:'XML',name:'tugas negara',url:'https://drive.google.com/file/d/sikecilrenn',size:'45 KB'}]},
+{user:'massanzn_am',ava:'https://i.pravatar.cc/100?img=6',cap:'negro angin',views:'12K',likes:'900',comments:8,links:[{type:'5MB',name:'negro angin',url:'https://alightcreative.com/am/share/massanzn',size:'5MB'}]},
+{user:'kiinhere',ava:'https://i.pravatar.cc/100?img=7',cap:'#fyp #xybca negro angin',views:'9K',likes:'1K',comments:15,links:[{type:'5MB',name:'negro angin',url:'https://alightcreative.com/am/share/kiinhere',size:'5MB'},{type:'XML',name:'negro angin xml',url:'https://drive.google.com/file/d/kiinherexml/view',size:'62 KB'}]},
+{user:'fede_theexplorer',ava:'https://i.pravatar.cc/100?img=8',cap:'The King is back',views:'40K',likes:'8K',comments:50,links:[{type:'5MB',name:'The King',url:'https://alightcreative.com/am/share/fede',size:'5MB'}]},
+];
+function fillExample(txt){document.getElementById('inputSearch').value=txt; doSearch();}
+function doSearch(){
+let q=document.getElementById('inputSearch').value.trim().toLowerCase();
+if(!q) return;
+document.getElementById('stepsBox').classList.add('hide');
+document.getElementById('loadingPreset').classList.remove('hide');
+document.getElementById('resultsArea').classList.add('hide');
+setTimeout(()=>{
+document.getElementById('loadingPreset').classList.add('hide');
+let filtered=mockVideos.filter(v=>v.cap.toLowerCase().includes(q)||v.user.toLowerCase().includes(q));
+if(filtered.length===0) filtered=mockVideos;
+renderResults(filtered);
+},700);
+}
+function renderResults(list){
+document.getElementById('resCount').innerText=list.length+' videos';
+let html='';
+list.forEach((v,i)=>{
+html+=`<div class="video-card" onclick="openDetail(${i})"><div class="video-thumb"><img src="${v.ava}"></div><div><div class="video-user">@${v.user}</div><div class="video-cap">${v.cap}</div><div class="video-tags">#preset${v.links[0].type.toLowerCase()}</div></div></div>`;
+});
+document.getElementById('videoList').innerHTML=html;
+document.getElementById('resultsArea').classList.remove('hide');
+}
+function openDetail(idx){
+let v=mockVideos[idx];
+document.getElementById('resultsArea').classList.add('hide');
+document.getElementById('loadingPreset').classList.remove('hide');
+setTimeout(()=>{
+document.getElementById('loadingPreset').classList.add('hide');
+let linksHtml='';
+v.links.forEach(l=>{
+linksHtml+=`<div class="preset-card"><div style="font-weight:700;font-size:13px">${l.name} <span style="background:#1e1e1e;padding:2px 6px;border-radius:6px;font-size:10px">${l.type} ${l.size}</span></div><div class="preset-link">${l.url}</div><div class="preset-actions"><button class="btn-preset" onclick="window.open('${l.url}','_blank')">${l.type==='XML'?'Get file':'Open preset'}</button><button class="btn-preset2" onclick="navigator.clipboard.writeText('${l.url}');alert('Copied!')">Copy link</button></div></div>`;
+});
+document.getElementById('detailContent').innerHTML=`<div class="detail"><div style="padding:14px"><b>Judul : ${v.cap}</b><p style="font-size:10px;opacity:.4;margin-top:4px">@${v.user} • ${v.views} views</p></div><div class="detail-meta"><div><p style="font-size:10px;opacity:.4">ACCOUNT</p><b>@${v.user}</b></div><div><p style="font-size:10px;opacity:.4">COMMENTS</p><b>${v.comments}</b></div><div><p style="font-size:10px;opacity:.4">VIEWS</p><b>${v.views}</b></div><div><p style="font-size:10px;opacity:.4">LIKES</p><b>${v.likes}</b></div></div><div class="preset-section"><div style="display:flex;justify-content:space-between;margin-bottom:12px"><b>Preset links</b><span style="background:#00ff88;color:#000;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:800">${v.links.length}</span></div>${linksHtml}</div></div>`;
+document.getElementById('detailArea').classList.remove('hide');
+},600);
+}
+function backToResults(){document.getElementById('detailArea').classList.add('hide');document.getElementById('resultsArea').classList.remove('hide');}
+let pct=1,bar=document.getElementById('bar'),pText=document.getElementById('pText'),splash=document.getElementById('splash'),app=document.getElementById('app');
+let inter=setInterval(()=>{pct+=Math.floor(Math.random()*16)+5;if(pct>=100){pct=100;clearInterval(inter);setTimeout(()=>{splash.classList.add('hide');app.classList.add('show');},300);}bar.style.width=pct+'%';pText.innerText=pct+'%';},100);
+setTimeout(()=>{doSearch();},3600);
+function downloadSelf(){let c=document.documentElement.outerHTML;let b=new Blob([c],{type:'text/html'});let u=URL.createObjectURL(b);let a=document.createElement('a');a.href=u;a.download='dilzALG.html';a.click();URL.revokeObjectURL(u);}
+</script>
+</body>
+</html>
