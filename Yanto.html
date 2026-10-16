@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>SFL Bypass V24 - Fix Mediafire</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#0a061a;color:#fff;min-height:100vh;padding-bottom:20px}
+.top{background:#1a1040;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.hero{padding:26px 20px;background:radial-gradient(ellipse at top,#2a1a6a,#0a061a 70%)}
+.kecil{font-size:11px;letter-spacing:3px;opacity:.5}
+.h1{font-size:30px;font-weight:900;line-height:1.1;margin:16px 0 10px}
+.h1 span{color:#a78bfa}
+.desc{font-size:13px;opacity:.6;line-height:1.5;margin-bottom:20px}
+.card{background:linear-gradient(135deg,#15102e,#0f0b28);border:1px solid #ffffff12;border-radius:16px;padding:14px;margin:14px 16px}
+.card-title{font-size:11px;letter-spacing:2px;opacity:.5;margin-bottom:10px;display:flex;gap:8px;align-items:center}
+.num{background:#a78bfa;color:#000;width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-weight:900;font-size:12px}
+.input-row{display:flex;gap:8px}
+.input{flex:1;background:#0a061a;border:1px solid #ffffff18;border-radius:10px;padding:14px 12px;color:#fff;font-size:13px}
+.btn{border:1px solid #ffffff15;background:#15102e;color:#fff;border-radius:10px;padding:0 18px;font-weight:700;cursor:pointer}
+.btn-main{width:100%;background:linear-gradient(135deg,#a78bfa,#7c3aed);color:#000;border:none;border-radius:12px;padding:16px;font-weight:900;font-size:14px;margin-top:12px;cursor:pointer}
+.log{background:#070416;border:1px solid #ffffff0d;border-radius:12px;padding:12px;font-size:11px;font-family:monospace;white-space:pre-wrap;word-break:break-all;min-height:80px;line-height:1.6}
+.result{background:linear-gradient(135deg,#0a1a10,#0a2818);border:1px solid #00ff8840;border-radius:16px;padding:16px;margin:14px 16px;display:none}
+.pill{background:#00ff8822;border:1px solid #00ff8840;color:#00ff88;font-size:10px;padding:4px 8px;border-radius:99px;font-weight:800;display:inline-block;margin-bottom:8px}
+.linkbox{background:#0008;border-radius:10px;padding:12px;margin:8px 0;word-break:break-all}
+.linkbox a{color:#00ff88;font-size:13px}
+.warn{background:#1a0a0a;border:1px solid #ff444430;border-radius:12px;padding:10px;font-size:11px;line-height:1.5;margin-top:10px}
+</style></head><body>
+<div class="top"><b>SFL.Bypass V24</b><span style="font-size:11px;opacity:.5">fix mediafire</span></div>
+<div class="hero">
+<div class="kecil">TANPA IKLAN • FIX MEDIAFIRE</div>
+<div class="h1">Lewatin link SFL,<br><span>langsung</span> ke Mediafire.</div>
+<div class="desc">Tempel link SFL, tekan bypass, link Mediafire aslinya langsung muncul. Nggak perlu nunggu iklan. Khusus cari link Mediafire!</div>
+</div>
+
+<div class="card">
+<div class="card-title"><span class="num">1</span> LINK SFL</div>
+<div class="input-row">
+<input class="input" id="sflInput" placeholder="https://sfl.gl/zX3JQLe7" value="https://sfl.gl/zX3JQLe7">
+<button class="btn" onclick="tempelLink()">Tempel</button>
+</div>
+<button class="btn-main" id="bypassBtn" onclick="bypassSFL()">⚡ BYPASS KE MEDIAFIRE</button>
+</div>
+
+<div class="card">
+<div class="card-title"><span class="num">2</span> LOG - CARI MEDIAFIRE</div>
+<div class="log" id="logBox">> Siap cari link Mediafire...
+> Tempel link SFL di atas lalu BYPASS</div>
+</div>
+
+<div class="result" id="resultBox">
+<div class="pill">✅ MEDIAFIRE DITEMUKAN!</div>
+<h3 style="font-size:14px;margin:8px 0">🔗 Link Mediafire Asli:</h3>
+<div class="linkbox"><a id="realLink" href="#" target="_blank">-</a></div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button class="btn-main" style="flex:1;margin:0" onclick="bukaLink()">🚀 BUKA MEDIAFIRE</button>
+<button class="btn" style="flex:1;padding:14px" onclick="copyLink()">📋 COPY</button>
+</div>
+<div class="warn" id="warnBox"></div>
+</div>
+
+<script>
+function log(t){var b=document.getElementById('logBox');b.innerText+='\n> '+t;b.scrollTop=b.scrollHeight;}
+function clearLog(){document.getElementById('logBox').innerText='';}
+async function tempelLink(){
+try{var txt=await navigator.clipboard.readText();if(txt){document.getElementById('sflInput').value=txt.trim();log('Tempel: '+txt.substring(0,60));}}catch(e){log('Clipboard diblokir — paste manual ya!');document.getElementById('sflInput').focus();}
+}
+
+function findMediafireLinks(html){
+// 1. Cari langsung mediafire.com/file/
+var re1=/https?:\/\/(?:www\.)?mediafire\.com\/file\/[A-Za-z0-9]+\/[^\s"'<>]+/gi;
+var re2=/https?:\/\/(?:www\.)?mediafire\.com\/download\/[A-Za-z0-9]+/gi;
+var found=[];
+var m;
+while((m=re1.exec(html))!==null) found.push(m[0]);
+while((m=re2.exec(html))!==null) found.push(m[0]);
+// 2. Cari base64 yang kalau di-decode jadi mediafire
+var base64re=/atob\(["']([A-Za-z0-9+\/=]{20,})["']\)/gi;
+while((m=base64re.exec(html))!==null){
+try{var dec=atob(m[1]);if(dec.includes('mediafire.com')) found.push(dec.match(/https?:\/\/[^\s"'<>]*mediafire[^\s"'<>]*/i)[0]);}catch(e){}
+}
+// 3. Cari data-href atau data-url
+var dataRe=/data-(?:href|url|link)=["'](https?:\/\/[^"']*mediafire[^"']*)["']/gi;
+while((m=dataRe.exec(html))!==null) found.push(m[1]);
+// Unik
+found=[...new Set(found)];
+return found;
+}
+
+async function bypassSFL(){
+var input=document.getElementById('sflInput').value.trim();
+var btn=document.getElementById('bypassBtn');
+var resultBox=document.getElementById('resultBox');
+if(!input.includes('sfl.gl')){alert('Tempel link SFL dulu!');return;}
+clearLog();
+resultBox.style.display='none';
+btn.innerText='Memproses cari Mediafire...';
+btn.disabled=true;
+log('Mengirim link ke API... '+input);
+log('Target: cari link mediafire.com di dalamnya...');
+
+var realLink=null;
+var proxies=[
+{ name:'AllOrigins', url:'https://api.allorigins.win/get?url='+encodeURIComponent(input), type:'json' },
+{ name:'CodeTabs', url:'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(input), type:'text' },
+{ name:'CorsProxy.io', url:'https://corsproxy.io/?'+encodeURIComponent(input), type:'text' }
+];
+
+for(var i=0;i<proxies.length;i++){
+var p=proxies[i];
+log('Metode '+(i+1)+': '+p.name+' — fetch...');
+try{
+var res=await fetch(p.url);
+var html='';
+if(p.type==='json'){var j=await res.json();html=j.contents||'';}else{html=await res.text();}
+log('Dapat HTML '+html.length+' char — scan Mediafire...');
+var links=findMediafireLinks(html);
+if(links.length>0){
+log('✅ Ketemu '+links.length+' link Mediafire: '+links[0].substring(0,80));
+realLink=links[0];
+break;
+}else{
+log('Gak ada Mediafire di metode ini — coba metode lain...');
+var anyLink=html.match(/https?:\/\/(?!.*sfl\.gl)[^\s"'<>]+/gi);
+if(anyLink) log('Link lain ditemukan '+anyLink.length+' tapi bukan Mediafire');
+}
+}catch(e){
+log('Gagal '+p.name+': '+e.message);
+}
+}
+
+if(!realLink){
+log('Semua proxy tidak nemu Mediafire — coba fallback buka SFL langsung...');
+log('Tip: SFL biasanya butuh klik tombol Lanjutkan 2x untuk ke Mediafire');
+document.getElementById('realLink').innerText=input;
+document.getElementById('realLink').href=input;
+document.getElementById('warnBox').innerHTML='⚠️ <b>Proxy ke-block / link SFL butuh JS</b><br>SFL lu mungkin link baru yang butuh klik manual.<br>1. TAP <b>BUKA MEDIAFIRE</b> di bawah — buka halaman SFL<br>2. Tunggu 3 detik — TAP tombol <b>Lanjutkan / Continue</b> (bukan iklan)<br>3. Link Mediafire asli akan muncul — itu yang lu mau!<br><br>Jika tetap gak jadi Mediafire, kirim link SFL lu ke gue — gue cek manual!';
+resultBox.style.display='block';
+btn.innerText='⚡ BYPASS KE MEDIAFIRE';
+btn.disabled=false;
+return;
+}
+
+log('✅ BERHASIL! Mediafire: '+realLink);
+document.getElementById('realLink').innerText=realLink;
+document.getElementById('realLink').href=realLink;
+document.getElementById('warnBox').innerHTML='✅ <b>Ini link Mediafire asli dari dalam SFL!</b><br>Langsung TAP BUKA MEDIAFIRE — tanpa iklan SFL lagi!<br>Jika masih redirect ke SFL, berarti SFL encrypt — coba refresh bypass 1x lagi!';
+resultBox.style.display='block';
+btn.innerText='⚡ BYPASS KE MEDIAFIRE';
+btn.disabled=false;
+}
+
+function bukaLink(){var l=document.getElementById('realLink').href;if(l) window.open(l,'_blank');}
+function copyLink(){
+var l=document.getElementById('realLink').innerText;
+navigator.clipboard.writeText(l).then(function(){log('✅ Mediafire link disalin: '+l.substring(0,80));});
+}
+</script>
+</body></html>
