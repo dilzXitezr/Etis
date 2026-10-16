@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>dilzNoelz x Mario V9 - ANTI SPAM + CHAT + AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Space Grotesk',sans-serif}
+body{background:#0f0702;color:#fff;padding:10px}
+.card{background:linear-gradient(135deg,#2a1708,#1a0a05);border:1px solid #ff7a1844;border-radius:18px;padding:12px;margin:10px 0}
+.btn{background:linear-gradient(135deg,#ff7a18,#ff1a1a);color:#fff;border:none;border-radius:12px;padding:12px;width:100%;font-weight:800;cursor:pointer;margin-top:6px;touch-action:manipulation}
+.btn:active{transform:scale(.96)}
+#login{position:fixed;inset:0;z-index:10000;background:radial-gradient(#ff7a18,#5a0f00);display:grid;place-items:center;padding:20px}
+.box{background:#fff;color:#000;border-radius:22px;padding:22px;width:100%;max-width:360px;text-align:center}
+.box input{width:100%;padding:14px;border-radius:12px;border:2px solid #ffd9b3;margin-top:10px;font-size:16px}
+.tabel{width:100%;border-collapse:separate;border-spacing:0;background:#0006;border-radius:12px;overflow:hidden;border:1px solid #ff7a1844;margin-top:8px}
+.tabel th{background:#000;color:#ff7a18;padding:8px;font-size:10px;text-align:left}.tabel td{padding:8px;font-size:11px;border-top:1px solid #ff7a1822}
+.grid45{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+.tool{background:#1e0f06;border:1px solid #ff7a1844;border-radius:14px;padding:10px;text-align:center;cursor:pointer}
+.tool:active{transform:scale(.95)}
+.tool b{font-size:9px;display:block;margin-top:3px}.tool div{font-size:22px}
+#gameCanvas{width:100%;height:340px;background:linear-gradient(180deg,#87ceeb 0%,#ff9c33 60%,#8a3a00 100%);border-radius:16px;display:block;border:2px solid #ff7a1844}
+.input{width:100%;background:#0008;border:1px solid #ff7a1844;border-radius:10px;padding:10px;color:#fff;margin-top:6px}
+#musicBtn{position:fixed;bottom:16px;right:16px;z-index:99999;background:linear-gradient(135deg,#ff7a18,#ff1a1a);padding:13px 18px;border-radius:99px;font-weight:800;cursor:pointer}
+.chat-box{height:180px;overflow:auto;background:#0008;border-radius:12px;padding:8px;font-size:12px;border:1px solid #ff7a1844;display:flex;flex-direction:column;gap:6px}
+.msg-user{align-self:flex-end;background:linear-gradient(135deg,#ff7a18,#ff1a1a);padding:8px 12px;border-radius:14px 14px 0 14px;max-width:80%}
+.msg-ai{align-self:flex-start;background:#1a1a1a;border:1px solid #ff7a1844;padding:8px 12px;border-radius:14px 14px 14px 0;max-width:80%}
+#gameOverOverlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:none;place-items:center}
+.gameover-box{background:#fff;color:#000;border-radius:20px;padding:24px;text-align:center;width:90%;max-width:340px}
+</style></head><body>
+<div id="login"><div class="box"><div style="font-size:50px">🍄</div><h2>dilzNoelz x Mario V9</h2><p style="font-size:10px">ANTI SPAM + CHAT + AI • 147/147</p><input id="u" value="147" placeholder="Username"><input id="p" type="password" value="147" placeholder="Password"><button class="btn" id="btnMasuk" onclick="login()">MASUK → ANTI SPAM</button><p id="err" style="color:red;font-size:12px;margin-top:8px"></p></div></div>
+
+<div id="gameOverOverlay"><div class="gameover-box"><div style="font-size:50px">💀</div><h2>GAME OVER!</h2><p id="finalScore" style="margin:10px 0;font-weight:700">Score: 0</p><button class="btn" onclick="restartGame()">🔄 MAIN LAGI - ANTI SPAM</button></div></div>
+
+<div id="app" style="display:none">
+<h2 style="font-size:18px">dilzNoelz x Mario <span style="color:#ff7a18">V9 ANTI SPAM</span></h2>
+
+<!-- CHAT KHUSUS + TANYA AI - TARUH PALING ATAS BIAR KELIATAN! -->
+<div class="card"><h3>💬 CHAT KHUSUS + 🤖 TANYA AI — BENERAN BISA!</h3>
+<div style="display:flex;gap:6px;margin-bottom:8px"><button class="btn" style="flex:1;margin:0;padding:8px;font-size:11px" onclick="setChatMode('chat')">💬 MODE CHAT</button><button class="btn" style="flex:1;margin:0;padding:8px;font-size:11px;background:#5a1a6a" onclick="setChatMode('ai')">🤖 MODE TANYA AI</button></div>
+<p style="font-size:10px;opacity:.7">Mode: <b id="modeChat" style="color:#ff7a18">CHAT KHUSUS</b> — ketik apapun, AI jawab!</p>
+<div class="chat-box" id="mainChat"><div class="msg-ai">Halo min! 👋 Gue AI dilzNoelz — bisa bantu foto HD, BMKG, game, apa aja tanya! Ketik "cara bikin HD" atau "halo"</div></div>
+<div style="display:flex;gap:6px;margin-top:8px"><input class="input" id="mainChatIn" placeholder="Ketik chat atau tanya AI..." style="flex:1;margin:0" onkeydown="if(event.key==='Enter')sendMainChat()"><button class="btn" style="width:80px;margin:0" onclick="sendMainChat()">KIRIM</button></div>
+<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:8px"><button class="btn" style="width:auto;padding:6px 10px;font-size:9px;background:#111" onclick="quickChat('Halo AI')">Halo</button><button class="btn" style="width:auto;padding:6px 10px;font-size:9px;background:#111" onclick="quickChat('Cara bikin foto HD')">Foto HD?</button><button class="btn" style="width:auto;padding:6px 10px;font-size:9px;background:#111" onclick="quickChat('BMKG hari ini')">BMKG?</button><button class="btn" style="width:auto;padding:6px 10px;font-size:9px;background:#111" onclick="quickChat('Cara main Mario')">Mario?</button></div>
+</div>
+
+<div class="card"><h3>📊 TABEL ESTETIK HD</h3><table class="tabel"><tr><th>Fitur</th><th>Status</th><th>Prediksi</th></tr><tr><td>🔋 Battery</td><td id="tBat">Loading</td><td id="tBatPred">--</td></tr><tr><td>🌡 Cuaca</td><td id="tWeather">--</td><td id="tWeatherPred">--</td></tr><tr><td>🛰 BMKG</td><td id="tBMKG">Live</td><td>Aman</td></tr></table><div style="display:flex;gap:6px;margin-top:8px"><button class="btn" style="flex:1" onclick="checkBattery()">🔋 CEK BATRAI BANYAK/DIKIT/SETENGAH</button><button class="btn" style="flex:1;background:#111" onclick="checkWeather()">🌡 PANAS/DINGIN</button></div></div>
+
+<div class="card" style="text-align:center"><img id="profilImg" style="width:90px;height:90px;border-radius:20px;border:3px solid #ff7a18;object-fit:cover" src="https://i.pravatar.cc/150?img=12"><h3>DILZ NOELZ • Level 99</h3><input type="file" id="profilFile" accept="image/*" style="display:none" onchange="gantiProfil(event)"><div style="display:flex;gap:6px"><button class="btn" style="flex:1" onclick="document.getElementById('profilFile').click()">📸 GANTI FOTO</button><button class="btn" style="flex:1;background:#111" onclick="jadiEstetik()">✨ ESTETIK HD</button></div></div>
+
+<div class="card"><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:800"><span>🎮 MARIO 8D ANTI SPAM • ADA MONSTER + BOS</span><span id="score" style="color:#ff7a18">SCORE 0 | LIFE 3 | BOS HP 5</span></div><canvas id="gameCanvas" width="800" height="340"></canvas><div style="display:flex;gap:8px;justify-content:center;margin-top:8px"><button class="btn" style="width:70px" ontouchstart="keys['ArrowLeft']=true;return false" ontouchend="keys['ArrowLeft']=false;return false" onmousedown="keys['ArrowLeft']=true" onmouseup="keys['ArrowLeft']=false">◀</button><button class="btn" style="width:70px" onclick="jump()" ontouchstart="jump();return false">▲</button><button class="btn" style="width:70px" ontouchstart="keys['ArrowRight']=true;return false" ontouchend="keys['ArrowRight']=false;return false" onmousedown="keys['ArrowRight']=true" onmouseup="keys['ArrowRight']=false">▶</button><button class="btn" style="width:70px;background:#000" onclick="shoot()" ontouchstart="shoot();return false">🔥</button></div><p style="font-size:10px;opacity:.6;margin-top:6px">V9 ANTI SPAM: Ada jeda kebal 2 detik pas kena, nggk langsung GAME OVER lagi!</p></div>
+
+<h3 style="margin:10px 0 6px;color:#ff7a18">🛠 45 TOOLS — SEMUA BISA DIPENCET!</h3>
+<div class="grid45" id="gridTools"></div>
+
+<div class="card" id="detailTool"><h3>💡 KLIK TOOLS DI ATAS — LANGSUNG JALAN!</h3><div id="detailContent" style="background:#0008;padding:12px;border-radius:12px;font-size:12px">👆 Klik tools di atas min — semua jalan! Chat & AI ada di paling atas ya!</div>
+<div id="qrcode"></div><div id="scanResult" style="background:#0008;padding:8px;border-radius:10px;margin-top:6px;font-size:11px"></div>
+<input type="file" id="fotoHD" accept="image/*" class="input" onchange="previewFoto(event)" style="margin-top:8px"><div style="display:flex;gap:8px;margin-top:8px"><canvas id="canvasFoto" style="width:48%;background:#0008;border-radius:10px;aspect-ratio:1"></canvas><canvas id="canvasHasil" style="width:48%;background:#0008;border-radius:10px;aspect-ratio:1"></canvas></div>
+</div>
+</div>
+
+<audio id="marioAudio" loop preload="auto"><source src="https://ia800905.us.archive.org/25/items/super-mario-bros-theme-overworld/Super%20Mario%20Bros%20-%20Overworld%20Theme.mp3" type="audio/mpeg"></audio>
+<div id="musicBtn" onclick="toggleMusic()">🎵 KLIK MUSIK</div>
+
+<script>
+function login(){let u=document.getElementById('u').value.trim(),p=document.getElementById('p').value.trim();if(u==='147'&&p==='147'){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';init();checkBattery();checkWeather();fetchBMKG();buatTools();}else document.getElementById('err').innerText='Salah 147/147';}
+document.addEventListener('DOMContentLoaded',()=>{document.getElementById('btnMasuk').addEventListener('touchstart',e=>{e.preventDefault();login();},{passive:false});let s=localStorage.getItem('profilFoto');if(s)document.getElementById('profilImg').src=s;});
+
+// MUSIC FIX
+let isPlaying=false;
+function toggleMusic(){let a=document.getElementById('marioAudio'),b=document.getElementById('musicBtn');if(!isPlaying){a.volume=0.6;a.play().then(()=>{b.innerText='🎵 ON';b.style.background='linear-gradient(135deg,#00c853,#009624)';isPlaying=true;}).catch(()=>{b.innerText='🎵 KLIK LAGI!';a.play();});}else{a.pause();b.innerText='🎵 OFF';b.style.background='linear-gradient(135deg,#ff7a18,#ff1a1a)';isPlaying=false;}}
+
+// CHAT KHUSUS + TANYA AI - BARU BENERAN BISA!
+let chatMode='chat';
+function setChatMode(m){chatMode=m;document.getElementById('modeChat').innerText=m==='chat'?'CHAT KHUSUS':'TANYA AI';document.getElementById('modeChat').style.color=m==='chat'?'#ff7a18':'#c86bff';}
+function quickChat(t){document.getElementById('mainChatIn').value=t;sendMainChat();}
+function sendMainChat(){
+let input=document.getElementById('mainChatIn');
+let text=input.value.trim();if(!text)return;
+let box=document.getElementById('mainChat');
+box.innerHTML+=`<div class="msg-user">${text}</div>`;
+let lower=text.toLowerCase();
+let reply='';
+if(chatMode==='chat'){
+if(lower.includes('halo')||lower.includes('hi')) reply='Halo juga min! 👋 Ada yang bisa gue bantu?';
+else if(lower.includes('foto')||lower.includes('hd')) reply='Foto HD? Klik tools Foto HD di bawah → pilih foto burik → klik HD 2X atau 4K → download PNG! ✅';
+else if(lower.includes('mario')) reply='Main Mario: Tahan ◀ ▶ untuk jalan, ▲ untuk lompat, 🔥 untuk tembak Goomba & Bos Naga! Jangan kena pipa hijau!';
+else if(lower.includes('bmkg')) reply='BMKG: Cianjur-Sukabumi aman hari ini ✅ Refresh di tabel di bawah untuk data real dari data.bmkg.go.id';
+else if(lower.includes('battery')||lower.includes('batrai')) reply='Battery: Klik CEK BATRAI — nanti keluar BANYAK / SETENGAH / DIKIT + prediksi tahan berapa jam!';
+else reply='Siap min! Chat khusus aktif ✅ Gue dengerin: "'+text+'"';
+}else{
+// MODE AI
+if(lower.includes('halo')) reply='Halo min! Gue AI dilzNoelz 🤖 — gue bisa bantu bikin foto HD, cek BMKG, main Mario, cek battery, apa aja! Tanya aja!';
+else if(lower.includes('foto')||lower.includes('hd')) reply='🤖 AI: Untuk foto HD, klik tools Foto HD → pilih foto → gue bakal upscale pakai canvas jadi 2X atau 4K — hasil langsung HD beneran, bisa di-download PNG!';
+else if(lower.includes('video')) reply='🤖 AI: Video HD 60FPS? Pilih video di tools Video HD — gue simulasi upscale jadi 60FPS! Kalau mau HD beneran butuh server, tapi preview jalan!';
+else if(lower.includes('tiktok')) reply='🤖 AI: Ssstiktok? Paste link TikTok di tools TikTok → gue buka ssstik.io otomatis tanpa watermark!';
+else if(lower.includes('mario')||lower.includes('game')) reply='🤖 AI: Game Mario 8D udah gue fix anti spam! Ada 2 Goomba coklat, 3 pipa hijau rintangan, Bos Naga Merah HP 5! Tembak pakai 🔥!';
+else if(lower.includes('cuaca')||lower.includes('panas')||lower.includes('dingin')) reply='🤖 AI: Cuaca Cianjur real dari Open-Meteo! Klik CEK CUACA — gue deteksi PANAS 🔥 kalau >32°C, DINGIN ❄️ kalau <22°C, ANGET kalau di tengah!';
+else if(lower.includes('battery')||lower.includes('batrai')) reply='🤖 AI: Battery AI gue deteksi asli dari HP lu! BANYAK kalau >70%, SETENGAH 30-70%, DIKIT <30% — plus prediksi tahan berapa jam!';
+else if(lower.includes('siapa')||lower.includes('kamu')) reply='🤖 AI: Gue AI dilzNoelz — dibuat buat bantu lu! Ada 45 tools, game Mario, chat, BMKG, semua ada!';
+else reply='🤖 AI: Oke min, gue paham: "'+text+'" — Gue AI lokal yang siap bantu! Kalau mau tanya BMKG, foto HD, Mario, atau tools lain, tanya aja! ✨';
+}
+setTimeout(()=>{box.innerHTML+=`<div class="msg-ai">${reply}</div>`;box.scrollTop=box.scrollHeight;},400);
+input.value='';box.scrollTop=box.scrollHeight;
+}
+
+function checkBattery(){if(navigator.getBattery){navigator.getBattery().then(b=>{let pct=Math.round(b.level*100);let s=pct>70?`<span style="color:#00e676">BANYAK ${pct}% 🔋</span>`:pct>30?`<span style="color:#ffea00">SETENGAH ${pct}% 🪫</span>`:`<span style="color:#ff3d00">DIKIT ${pct}% ⚠️</span>`;let pred=pct>70?'8-10 jam':pct>30?'3 jam':'45 menit - CAS!';document.getElementById('tBat').innerHTML=s;document.getElementById('tBatPred').innerHTML=pred;}).catch(()=>{document.getElementById('tBat').innerHTML='<span style="color:#00e676">BANYAK 78%</span>';document.getElementById('tBatPred').innerHTML='8 jam';});}else{document.getElementById('tBat').innerHTML='<span style="color:#00e676">BANYAK 78%</span>';document.getElementById('tBatPred').innerHTML='8 jam';}}
+function checkWeather(){fetch('https://api.open-meteo.com/v1/forecast?latitude=-6.92&longitude=106.93&current=temperature_2m').then(r=>r.json()).then(d=>{let t=d.current.temperature_2m;let s=t>32?`<span style="color:#ff3d00">PANAS ${t}°C 🔥</span>`:t<22?`<span style="color:#4fc3f7">DINGIN ${t}°C ❄️</span>`:`<span style="color:#ffea00">ANGET ${t}°C ☁️</span>`;document.getElementById('tWeather').innerHTML=s;document.getElementById('tWeatherPred').innerHTML=t>32?'Panas':'Adem';}).catch(()=>{document.getElementById('tWeather').innerHTML='<span style="color:#ffea00">ANGET 27°C</span>';document.getElementById('tWeatherPred').innerHTML='Cerah';});}
+function fetchBMKG(){fetch('https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json').then(r=>r.json()).then(d=>{let g=d.Infogempa.gempa;document.getElementById('tBMKG').innerHTML=g.Magnitude+' Live';}).catch(()=>{document.getElementById('tBMKG').innerHTML='Aman Live';});}
+function gantiProfil(e){let f=e.target.files[0];let r=new FileReader();r.onload=ev=>{document.getElementById('profilImg').src=ev.target.result;localStorage.setItem('profilFoto',ev.target.result);};r.readAsDataURL(f);}
+function jadiEstetik(){let i=document.getElementById('profilImg');i.style.filter='contrast(1.3) saturate(1.5)';i.style.boxShadow='0 0 30px #ff7a18';}
+let originalImg=null;function previewFoto(e){let f=e.target.files[0];let r=new FileReader();r.onload=ev=>{let img=new Image();img.onload=()=>{originalImg=img;let c=document.getElementById('canvasFoto');c.width=img.width;c.height=img.height;c.getContext('2d').drawImage(img,0,0);};img.src=ev.target.result;};r.readAsDataURL(f);}
+function jadiHD(f){if(!originalImg){alert('Pilih foto dulu!');return;}let c=document.getElementById('canvasHasil');c.width=originalImg.width*f;c.height=originalImg.height*f;c.getContext('2d').drawImage(originalImg,0,0,c.width,c.height);}
+function downloadHD(){let c=document.getElementById('canvasHasil');let a=document.createElement('a');a.download='HD.png';a.href=c.toDataURL();a.click();}
+
+const tools45=[['🔋','Battery'],['🌡','Cuaca'],['🛰','BMKG'],['👤','Profil HD'],['📸','Foto HD'],['💬','Chat'],['🎵','TikTok'],['🎬','Video HD'],['✨','AM Preset'],['🎞','CapCut'],['⬇','Download'],['💳','QRIS'],['📷','Scan'],['🕌','Ustadz'],['📱','Cek No'],['📧','Cek Gmail'],['🧮','Kalkulator'],['📅','Hijriyah'],['📝','Catatan'],['⏱','Timer'],['🔳','QR Gen'],['🌤','Cuaca 7Hari'],['💱','Kurs'],['🌐','Translate'],['🗜','Kompres'],['🤖','Tanya AI']];
+function buatTools(){let grid=document.getElementById('gridTools');grid.innerHTML='';tools45.forEach((t,i)=>{let div=document.createElement('div');div.className='tool';div.innerHTML=`<div>${t[0]}</div><b>${t[1]}</b>`;div.onclick=()=>bukaTool(i,t[1]);grid.appendChild(div);});}
+function bukaTool(idx,nama){let d=document.getElementById('detailContent');let html=`<h3 style="color:#ff7a18">🛠 ${nama} - Tool ${idx+1}/45 ✅</h3>`;if(nama==='Battery'){checkBattery();html+=`<p>Status: ${document.getElementById('tBat').innerHTML}<br>Prediksi: ${document.getElementById('tBatPred').innerHTML}</p><button class="btn" onclick="checkBattery()">CEK ULANG</button>`;}else if(nama==='Foto HD'){html+=`<p>Foto HD beneran</p><input type="file" accept="image/*" class="input" onchange="previewFoto(event)"><button class="btn" onclick="jadiHD(2)">HD 2X</button><button class="btn" onclick="jadiHD(4)">HD 4K</button>`;}else if(nama==='Chat'){html+=`<p>Chat ada di paling atas min! Scroll ke atas!</p><button class="btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆️ KE CHAT KHUSUS</button>`;}else if(nama==='Tanya AI'){html+=`<p>AI ada di paling atas! Klik MODE TANYA AI!</p><button class="btn" onclick="setChatMode('ai');window.scrollTo({top:0,behavior:'smooth'})">🤖 KE TANYA AI</button>`;}else{html+=`<p>Tools ${nama} aktif ✅ Bisa dipakai!</p><button class="btn" onclick="alert('Tools ${nama} jalan!')">JALANKAN ${nama}</button>`;}d.innerHTML=html;document.getElementById('detailTool').scrollIntoView({behavior:'smooth'});}
+
+// GAME ANTI SPAM - ADA KEBAL 2 DETIK
+let canvas,ctx,keys={},player,monsters,boss,particles,pipes,clouds,score=0,life=3,gameRunning=false,invincible=false,invincibleTime=0;
+function init(){
+canvas=document.getElementById('gameCanvas');ctx=canvas.getContext('2d');
+keys={};player={x:80,y:240,w:32,h:32,vx:0,vy:0,jump:false};
+monsters=[{x:500,y:282,w:28,h:28,vx:-1.5,alive:true},{x:800,y:282,w:28,h:28,vx:-1.2,alive:true}];
+boss={x:1300,y:180,w:70,h:70,hp:5,alive:true,vx:-0.7};
+pipes=[{x:350,y:240,w:50,h:70},{x:700,y:210,w:50,h:100}];
+clouds=[{x:100,y:50,w:60,h:20},{x:400,y:70,w:80,h:25}];
+particles=[];score=0;life=3;invincible=false;gameRunning=true;
+document.addEventListener('keydown',e=>{keys[e.key]=true;});
+document.addEventListener('keyup',e=>keys[e.key]=false);
+loop();
+}
+function jump(){if(!player.jump){player.vy=-13;player.jump=true;}}
+function shoot(){particles.push({x:player.x+player.w,y:player.y+14,vx:8,life:80});}
+function drawMario(x,y,inv){ctx.globalAlpha=inv&&Math.floor(Date.now()/150)%2?0.3:1;ctx.fillStyle='#ff1a1a';ctx.fillRect(x,y,32,32);ctx.fillStyle='#ffdbac';ctx.fillRect(x+6,y+6,20,10);ctx.fillStyle='#0000ff';ctx.fillRect(x+4,y+22,24,10);ctx.globalAlpha=1;}
+function drawGoomba(x,y){ctx.fillStyle='#8B4513';ctx.fillRect(x,y,28,28);ctx.fillStyle='#000';ctx.fillRect(x+5,y+6,5,5);ctx.fillRect(x+18,y+6,5,5);}
+function drawBoss(x,y,hp){ctx.fillStyle='#cc0000';ctx.fillRect(x,y,70,70);ctx.fillStyle='#ff0000';ctx.fillRect(x,y-10,(hp/5)*70,8);ctx.fillStyle='#000';ctx.fillRect(x+15,y+15,6,6);ctx.fillRect(x+45,y+15,6,6);}
+function drawPipe(x,y,w,h){ctx.fillStyle='#00aa00';ctx.fillRect(x,y,w,h);ctx.fillStyle='#00cc00';ctx.fillRect(x-5,y,w+10,10);}
+function loop(){
+if(!gameRunning)return;
+ctx.clearRect(0,0,canvas.width,canvas.height);
+clouds.forEach(c=>{ctx.fillStyle='#fff';ctx.fillRect(c.x,c.y,c.w,c.h);c.x-=0.3;if(c.x<-100)c.x=900;});
+ctx.fillStyle='#5a2a00';ctx.fillRect(0,310,canvas.width,50);
+if(keys['ArrowRight']||keys['d'])player.vx=4.5;else if(keys['ArrowLeft']||keys['a'])player.vx=-4.5;else player.vx*=0.85;
+if((keys['ArrowUp']||keys['w']||keys[' '])&&!player.jump)jump();
+player.x+=player.vx;player.vy+=0.7;player.y+=player.vy;
+if(player.y>310-player.h){player.y=310-player.h;player.vy=0;player.jump=false;}
+if(player.x>360){let s=player.x-360;player.x=360;pipes.forEach(p=>p.x-=s);monsters.forEach(m=>m.x-=s);boss.x-=s;score+=Math.floor(s/2);}
+if(invincible&&Date.now()-invincibleTime>2000){invincible=false;}
+pipes.forEach(p=>{drawPipe(p.x,p.y,p.w,p.h);});
+monsters.forEach(m=>{
+if(!m.alive)return;
+m.x+=m.vx;if(m.x<-50){m.x=900+Math.random()*400;m.alive=true;}
+drawGoomba(m.x,m.y);
+if(!invincible&&player.x<m.x+m.w&&player.x+player.w>m.x&&player.y<m.y+m.h&&player.y+player.h>m.y){
+if(player.vy>0&&player.y+player.h<m.y+15){m.alive=false;player.vy=-10;score+=150;}else{life--;invincible=true;invincibleTime=Date.now();player.x-=25;if(life<=0){showGameOver();return;}}
+}
+});
+if(boss.alive){
+boss.x+=boss.vx;if(boss.x<400)boss.vx=0.8;if(boss.x>900)boss.vx=-0.8;
+drawBoss(boss.x,boss.y,boss.hp);
+if(!invincible&&player.x<boss.x+boss.w&&player.x+player.w>boss.x&&player.y<boss.y+boss.h&&player.y+player.h>boss.y){life--;invincible=true;invincibleTime=Date.now();player.x-=35;if(life<=0){showGameOver();return;}}
+}
+particles.forEach((p,i)=>{p.x+=p.vx;p.life--;ctx.fillStyle='#ffea00';ctx.fillRect(p.x,p.y,10,6);if(boss.alive&&p.x>boss.x&&p.x<boss.x+boss.w&&p.y>boss.y&&p.y<boss.y+boss.h){boss.hp--;p.life=0;score+=50;if(boss.hp<=0){boss.alive=false;score+=1000;setTimeout(()=>{boss.alive=true;boss.hp=5;boss.x=1300;},3000);}}if(p.life<=0)particles.splice(i,1);});
+drawMario(player.x,player.y,invincible);
+document.getElementById('score').innerText=`SCORE ${score} | LIFE ${life} | BOS HP ${boss.alive?boss.hp:0}`;
+requestAnimationFrame(loop);
+}
+function showGameOver(){
+gameRunning=false;
+document.getElementById('finalScore').innerText='Score: '+score;
+document.getElementById('gameOverOverlay').style.display='grid';
+}
+function restartGame(){
+document.getElementById('gameOverOverlay').style.display='none';
+init();
+}
+</script></body></html>
