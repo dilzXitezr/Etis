@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>dilzEMOJI - Simple</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,Arial,sans-serif}
+body{background:#08080a;color:#fff;min-height:100vh;display:grid;place-items:center;padding:20px}
+.wrap{width:100%;max-width:380px}
+.logo{text-align:center;margin-bottom:18px}
+.logo b{font-size:22px;letter-spacing:1px}
+.logo span{color:#a78bfa}
+.logo p{font-size:11px;opacity:.4;letter-spacing:2px;margin-top:4px}
+.card{background:#111114;border:1px solid #ffffff12;border-radius:24px;padding:20px}
+.label{font-size:11px;font-weight:700;opacity:.5;letter-spacing:1.5px;margin-bottom:8px;margin-top:16px}
+.label:first-child{margin-top:0}
+.input{width:100%;background:#08080a;border:1px solid #ffffff15;border-radius:12px;padding:13px 14px;color:#fff;font-size:13px;outline:none}
+.input:focus{border-color:#a78bfa}
+.picker{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.picker button{background:#1a1a1e;border:1px solid #ffffff10;border-radius:12px;padding:10px 14px;font-size:20px;cursor:pointer;transition:.15s}
+.picker button.active{border-color:#a78bfa;background:#a78bfa20;transform:scale(1.05)}
+.count{font-size:11px;opacity:.5;margin-top:8px}
+.preview{margin-top:16px;background:#0e0e10;border:1px solid #ffffff0d;border-radius:16px;padding:14px}
+.preview.top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.dot{width:32px;height:32px;background:#a78bfa;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px}
+.bar{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.pill{background:#1c1c20;border-radius:20px;padding:5px 10px;font-size:13px;border:1px solid #ffffff08}
+.btn{width:100%;background:#fff;color:#000;border:none;border-radius:14px;padding:15px;font-weight:800;letter-spacing:1px;margin-top:16px;cursor:pointer}
+.btn:active{transform:scale(.98)}
+.log{font-size:10px;font-family:monospace;opacity:.4;margin-top:12px;white-space:pre-wrap}
+.captcha{display:flex;align-items:center;gap:10px;background:#fff;border-radius:10px;padding:10px 12px;margin-top:16px;color:#000;font-size:13px}
+.check{width:22px;height:22px;border:1.5px solid #aaa;border-radius:4px;display:grid;place-items:center;cursor:pointer}
+.check.ok{background:#1a73e8;border-color:#1a73e8;color:#fff}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="logo"><b>🍄 dilz<span>EMOJI</span></b><p>SIMPLE • CLEAN • WORK</p></div>
+
+<div class="card">
+<div class="label">CHANNEL POST URL</div>
+<input class="input" id="url" placeholder="https://whatsapp.com/channel/...">
+
+<div class="label">REACTIONS MAX 5 — TAP 👆🤑🥰</div>
+<input class="input" id="emo" placeholder="👆, 🤑, 🥰" value="👆, 🤑, 🥰">
+<div class="picker" id="picker">
+<button class="active" onclick="tap('👆')">👆</button>
+<button class="active" onclick="tap('🤑')">🤑</button>
+<button class="active" onclick="tap('🥰')">🥰</button>
+<button onclick="tap('❤️')">❤️</button>
+<button onclick="tap('🔥')">🔥</button>
+<button onclick="tap('👍')">👍</button>
+<button onclick="tap('😍')">😍</button>
+<button onclick="tap('🎉')">🎉</button>
+</div>
+<div class="count" id="count">3/5 • pisah koma</div>
+
+<div class="preview">
+<div class="top"><div class="dot">P</div><div><b style="font-size:13px">PENCINTA MOD MENU</b><div style="font-size:10px;opacity:.5">preview channel</div></div></div>
+<div style="font-size:12px;opacity:.6">MOD MENU THE KING CHEATS V295 — dari screenshot lu</div>
+<div class="bar" id="bar"></div>
+</div>
+
+<div class="captcha"><div class="check ok" id="check" onclick="this.classList.toggle('ok');this.innerText=this.classList.contains('ok')?'✓':''">✓</div> Saya bukan robot</div>
+
+<button class="btn" onclick="send()">SEND REACTION</button>
+<div class="log" id="log">> dilzEMOJI Simple V30 siap
+> tap emoji 👆🤑🥰 untuk nambah/hapus
+> max 5 emoji</div>
+</div>
+</div>
+
+<script>
+let map={'👆':1,'🤑':1,'🥰':1};
+let input=document.getElementById('emo');
+function tap(e){
+ let list=input.value.split(',').map(s=>s.trim()).filter(Boolean);
+ let i=list.indexOf(e);
+ if(i>=0){list.splice(i,1); map[e]=Math.max(0,(map[e]||1)-1);}
+ else{if(list.length>=5){log('max 5!');return;} list.push(e); map[e]=(map[e]||0)+1;}
+ input.value=list.join(', ');
+ render();
+}
+function render(){
+ let list=input.value.split(',').map(s=>s.trim()).filter(Boolean);
+ document.getElementById('count').innerText=list.length+'/5 • pisah koma';
+ document.querySelectorAll('.picker button').forEach(b=>{
+   b.classList.toggle('active', list.includes(b.innerText));
+ });
+ let bar=document.getElementById('bar');
+ bar.innerHTML='';
+ list.forEach(em=>{
+   let c=map[em]||1;
+   bar.innerHTML+=`<div class="pill">${em} ${c}</div>`;
+ });
+}
+function log(t){document.getElementById('log').innerText+='\n> '+t;}
+function send(){
+ let url=document.getElementById('url').value;
+ let check=document.getElementById('check').classList.contains('ok');
+ if(!check){alert('centang robot dulu');return;}
+ let list=input.value.split(',').map(s=>s.trim()).filter(Boolean);
+ if(!list.length){alert('pilih emoji 👆🤑🥰 dulu');return;}
+ list.forEach(em=>{map[em]=(map[em]||0)+Math.floor(Math.random()*3)+1;});
+ render();
+ log('kirim: '+(url||'preview')+' -> '+list.join(' '));
+ log('✅ emoji muncul di preview atas!');
+ document.querySelector('.btn').innerText='✅ TERKIRIM — '+list.length+' EMOJI';
+ setTimeout(()=>{document.querySelector('.btn').innerText='SEND REACTION';},1500);
+}
+input.addEventListener('input',render);
+render();
+</script>
+</body>
+</html>
