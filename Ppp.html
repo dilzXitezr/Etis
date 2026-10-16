@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>dilzALG - AM Preset Finder</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#fff;font-family:Inter,sans-serif;overflow-x:hidden}
+:root{--green:#00ff88;--green2:#00cc6a;--card:#151515;--card2:#1c1c1c;--border:#232323}
+
+/* SPLASH - KYK VIDEO 0-3 DETIK */
+#splash{position:fixed;inset:0;background:radial-gradient(ellipse at center,#1a1a1a,#050505);display:grid;place-items:center;z-index:9999;transition:opacity.6s}
+#splash.hide{opacity:0;pointer-events:none}
+.splash-box{text-align:center}
+.logo-wrap{width:88px;height:88px;background:#111;border:1.5px solid var(--border);border-radius:22px;display:grid;place-items:center;margin:0 auto 16px;position:relative;overflow:hidden}
+.logo-wrap::before{content:'';position:absolute;top:50%;left:0;right:0;height:2px;background:var(--green);box-shadow:0 0 20px var(--green);animation:scan 1.8s infinite}
+@keyframes scan{0%{top:20%}100%{top:80%}}
+.logo-icon{width:48px;height:48px;color:var(--green);filter:drop-shadow(0 0 12px var(--green))}
+.splash-title{font-family:Space Grotesk;font-size:22px;font-weight:700;letter-spacing:.5px}
+.splash-sub{font-size:10px;letter-spacing:3px;opacity:.4;margin-top:4px;text-transform:uppercase}
+.progress{width:160px;height:3px;background:#1f1f1f;border-radius:99px;margin:18px auto 6px;overflow:hidden}
+.progress-bar{height:100%;background:var(--green);box-shadow:0 0 10px var(--green);width:0%;transition:width.1s}
+.progress-text{font-size:11px;opacity:.5}
+.by{position:absolute;bottom:24px;left:0;right:0;text-align:center;font-size:11px;opacity:.3;letter-spacing:2px}
+
+/* APP */
+#app{opacity:0;transition:opacity.5s}
+#app.show{opacity:1}
+.header{padding:18px 20px 0;display:flex;align-items:center;gap:12px}
+.header-logo{width:38px;height:38px;background:#111;border:1px solid var(--border);border-radius:12px;display:grid;place-items:center}
+.header-logo svg{width:22px;height:22px;color:var(--green)}
+.header-text b{font-family:Space Grotesk;font-size:14px}
+.header-text p{font-size:10px;opacity:.4}
+
+.container{padding:16px 14px 100px;max-width:480px;margin:0 auto}
+
+/* TABS KYK VIDEO */
+.tabs{display:flex;gap:8px;margin:18px 0 14px}
+.tab{flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 10px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:.2s;position:relative}
+.tab.active{background:#16261c;border-color:var(--green);box-shadow:0 0 0 1px #00ff8822}
+.tab svg{width:16px;height:16px;opacity:.6}
+.tab.active svg{opacity:1;color:var(--green)}
+.tab span{font-size:12px;font-weight:600}
+.tab.new{position:absolute;top:-6px;right:-4px;background:#ff1a4a;color:#fff;font-size:8px;font-weight:800;padding:2px 6px;border-radius:99px;letter-spacing:.5px}
+
+.title{font-family:Space Grotesk;font-size:26px;font-weight:700;line-height:1.1;margin-bottom:8px}
+.title-line{width:40px;height:3px;background:var(--green);border-radius:99px;margin-bottom:14px}
+.desc{font-size:12px;opacity:.5;line-height:1.5;margin-bottom:14px}
+
+/* SEARCH BOX KYK VIDEO */
+.search-wrap{position:relative;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:4px;display:flex;gap:6px;align-items:center}
+.search-wrap input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:13px;padding:12px 8px}
+.search-wrap input::placeholder{opacity:.3}
+.btn-search{background:var(--green);color:#000;border:none;border-radius:10px;padding:11px 18px;font-weight:800;font-size:12px;cursor:pointer;letter-spacing:.5px}
+.btn-search:active{transform:scale(.97)}
+.examples{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.examples a{font-size:11px;background:var(--card);border:1px solid var(--border);border-radius:99px;padding:6px 10px;opacity:.5;cursor:pointer;text-decoration:none;color:#fff}
+
+/* STEP BY STEP */
+.steps{margin-top:18px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
+.steps-title{font-size:11px;letter-spacing:2px;opacity:.4;margin-bottom:12px;font-weight:700}
+.step{display:flex;gap:12px;margin-bottom:12px}
+.step:last-child{margin-bottom:0}
+.step-num{width:24px;height:24px;background:#1e1e1e;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--green);border:1px solid #ffffff10;flex-shrink:0}
+.step-text{font-size:12px;line-height:1.4}
+.step-text b{color:#fff}
+.step-text span{opacity:.5}
+
+/* RESULTS - KYK VIDEO LIST TIKTOK */
+.results-head{margin:18px 0 12px;display:flex;justify-content:space-between;align-items:center}
+.results-head b{font-size:13px}
+.results-head span{font-size:11px;opacity:.4}
+.video-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;display:flex;gap:10px;margin-bottom:10px;cursor:pointer;transition:.2s}
+.video-card:hover{border-color:#ffffff20;transform:translateY(-1px)}
+.video-thumb{width:56px;height:56px;background:#111;border-radius:10px;overflow:hidden;flex-shrink:0;position:relative}
+.video-thumb img{width:100%;height:100%;object-fit:cover}
+.video-info{flex:1;min-width:0}
+.video-user{font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px}
+.video-user i{font-size:10px;opacity:.5;font-style:normal}
+.video-cap{font-size:11px;opacity:.6;margin-top:3px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.video-tags{font-size:10px;color:var(--green);opacity:.7;margin-top:4px}
+
+/* LOADING MENCARI */
+.loading-center{padding:40px 20px;text-align:center}
+.loading-center.logo-wrap{width:60px;height:60px;border-radius:16px}
+.loading-center p{margin-top:12px;font-size:13px;opacity:.7}
+
+/* PRESET DETAIL - KYK VIDEO AKHIR */
+.detail{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-top:12px}
+.detail-head{padding:14px;display:flex;justify-content:space-between;align-items:flex-start}
+.detail-head b{font-size:13px}
+.detail-head span{font-size:10px;background:#1e1e1e;padding:4px 8px;border-radius:99px;opacity:.6}
+.detail-meta{display:grid;grid-template-columns:1fr 1fr;padding:0 14px 14px;gap:10px}
+.meta-item{font-size:11px}
+.meta-item p{opacity:.4;font-size:10px;letter-spacing:1px;margin-bottom:2px}
+.meta-item b{font-size:13px}
+.preset-section{border-top:1px solid var(--border);padding:14px}
+.preset-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.preset-head b{font-size:12px}
+.preset-head span{font-size:11px;background:var(--green);color:#000;font-weight:800;padding:3px 8px;border-radius:99px}
+.preset-card{background:#0f0f0f;border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px}
+.preset-name{font-size:13px;font-weight:700;margin-bottom:6px;display:flex;gap:8px;align-items:center}
+.preset-name.tag{font-size:10px;background:#1e1e1e;border:1px solid var(--border);padding:2px 6px;border-radius:6px}
+.preset-link{font-size:11px;opacity:.5;word-break:break-all;line-height:1.4;background:#0a0a0a;border:1px solid #ffffff08;border-radius:8px;padding:8px;margin:8px 0}
+.preset-actions{display:flex;gap:8px}
+.btn-preset{flex:1;background:var(--green);color:#000;border:none;border-radius:10px;padding:10px;font-weight:800;font-size:12px;cursor:pointer}
+.btn-preset2{flex:1;background:transparent;color:#fff;border:1px solid var(--border);border-radius:10px;padding:10px;font-weight:600;font-size:12px;cursor:pointer}
+.back{font-size:12px;opacity:.5;cursor:pointer;margin-bottom:12px;display:inline-flex;gap:6px;align-items:center}
+
+.hide{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- SPLASH KYK VIDEO 0-3 DETIK -->
+<div id="splash">
+<div class="splash-box">
+<div class="logo-wrap">
+<svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0-6 0"/><path d="M12 2a10 10 0 0 1 10 10a10 10 0 0 1-10 10a10 10 0 0 1-10-10A10 10 0 0 1 12 2z"/><path d="M12 6a6 6 0 0 1 6 6a6 6 0 0 1-6 6a6 6 0 0 1-6-6a6 6 0 0 1 6-6z"/></svg>
+</div>
+<div class="splash-title">AM Finder</div>
+<div class="splash-sub">Pencari Preset Alight Motion</div>
+<div class="progress"><div class="progress-bar" id="bar"></div></div>
+<div class="progress-text" id="pText">1%</div>
+</div>
+<div class="by">- By Givy -</div>
+</div>
+
+<!-- APP UTAMA - KYK VIDEO -->
+<div id="app">
+<div class="header">
+<div class="header-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0-6 0"/><path d="M12 2a10 10 0 0 1 10 10a10 10 0 0 1-10 10a10 10 0 0 1-10-10A10 10 0 0 1 12 2z"/></svg></div>
+<div class="header-text"><b>AM Preset Finder</b><p>Find Alight Motion presets from any TikTok link</p></div>
+</div>
+
+<div class="container">
+<div class="title">Find preset links</div>
+<div class="title-line"></div>
+
+<div class="tabs">
+<div class="tab" id="tabUrl" onclick="switchTab('url')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>URL Video</span></div>
+<div class="tab active" id="tabCari" onclick="switchTab('cari')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span>Cari Preset</span><span class="new">NEW</span></div>
+</div>
+
+<div id="descUrl" class="desc hide">Masukkan link video TikTok untuk mencari link preset di deskripsi, komentar, dan balasan.</div>
+<div id="descCari" class="desc">Cari nama lagu atau kata kunci, lalu pilih video untuk mencari link preset di deskripsi, bio, komentar, dan balasannya.</div>
+
+<div class="search-wrap">
+<svg style="width:16px;height:16px;opacity:.3;margin-left:8px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+<input id="inputSearch" placeholder="Cari nama lagu atau kata kunci..." value="negro angin" oninput="liveSearch(this.value)">
+<button class="btn-search" onclick="doSearch()">Search</button>
+</div>
+
+<div class="examples">
+<a onclick="fillExample('negro angin')">negro angin</a>
+<a onclick="fillExample('jedag jedug')">jedag jedug</a>
+<a onclick="fillExample('preset xml')">preset xml</a>
+</div>
+
+<!-- STEP BY STEP KYK VIDEO -->
+<div class="steps" id="stepsBox">
+<div class="steps-title">STEP BY STEP</div>
+<div class="step"><div class="step-num">1</div><div class="step-text"><b>Paste a TikTok video link</b><br><span>Tempel link TikTok yang ada preset AM</span></div></div>
+<div class="step"><div class="step-num">2</div><div class="step-text"><b>AM Finder scans the video, bio and comments</b><br><span>Otomatis scan deskripsi, bio, komen buat cari link alight.link</span></div></div>
+<div class="step"><div class="step-num">3</div><div class="step-text"><b>Preset links are extracted automatically</b><br><span>Link preset 5MB, XML, alightcreative ke-detect otomatis</span></div></div>
+<div class="step"><div class="step-num">4</div><div class="step-text"><b>Copy the preset you need</b><br><span>Tinggal Open preset / Copy link / Get file</span></div></div>
+</div>
+
+<!-- RESULTS -->
+<div id="resultsArea" class="hide">
+<div class="results-head"><b id="resCount">12 videos</b><span>dilzALG • By Givy</span></div>
+<div id="videoList"></div>
+</div>
+
+<!-- LOADING MENCARI LINK PRESET KYK VIDEO DETIK 20 -->
+<div id="loadingPreset" class="loading-center hide">
+<div class="logo-wrap"><svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0-6 0"/><path d="M12 2a10 10 0 0 1 10 10a10 10 0 0 1-10 10a10 10 0 0 1-10-10A10 10 0 0 1 12 2z"/></svg></div>
+<p>Mencari link preset...</p>
+</div>
+
+<!-- DETAIL PRESET KYK VIDEO AKHIR -->
+<div id="detailArea" class="hide">
+<div class="back" onclick="backToResults()">← Kembali</div>
+<div id="detailContent"></div>
+</div>
+
+</div>
+</div>
+
+<script>
+// MOCK DATA KYK VIDEO LU - 12 VIDEOS NEGRO ANGIN
+const mockVideos=[
+{user:'presetdanang',ava:'https://i.pravatar.cc/100?img=1',cap:'Negro angin II fyp Ryo7? > #presetbawl5mb #alightmotion #fypcreator',views:'94.2K',likes:'94K',comments:62,links:[{type:'5MB',name:'Negro angin',url:'https://alightcreative.com/am/share/0SJr0o0U0Bk10N2p1h2f7d9a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1w2x3y4z5a6b7c8d9e0f1g2h3i4j5k6l7m8n9o0p1q2r3s4t5u6v7w8x9y0z1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6z7',size:'5MB'},{type:'XML',name:'Negro angin',url:'https://drive.google.com/file/d/1ToNAeTdanang0SJr0o0U0Bk10/view',size:'73.8 KB'}]},
+{user:'gfvaaxml',ava:'https://i.pravatar.cc/100?img=2',cap:'Bagian 22 | Negro Angin 🥰 I BUY AM PREM I APK PRO DI BIO! -- #presetalightmotion #presetxml #gfva #kk #xyzbca',views:'22K',likes:'4K',comments:12,links:[{type:'XML',name:'Negro angin 22',url:'https://drive.google.com/file/d/1NegroAngin22/view',size:'81 KB'}]},
+{user:'niprstpann',ava:'https://i.pravatar.cc/100?img=3',cap:'#pannpreset negro angin 😎 #fleyemera4B #presetalightmotion #fyp #presetxml',views:'8.1K',likes:'1.2K',comments:5,links:[{type:'XML',name:'negro angin pann',url:'https://alightcreative.com/am/share/pannpreset',size:'XML'}]},
+{user:'maskrisnaa0',ava:'https://i.pravatar.cc/100?img=4',cap:'lagu trending negro angin 🔥 #phorogo24am #presetalightmotion #fyp',views:'15K',likes:'2K',comments:20,links:[{type:'5MB',name:'negro angin',url:'https://alightcreative.com/am/share/maskrisnaa',size:'5MB'}]},
+{user:'sikecil_renn38',ava:'https://i.pravatar.cc/100?img=5',cap:'Tugas negara selesai 😎 #presetalightmotion #fyp #foryou',views:'30K',likes:'5K',comments:40,links:[{type:'XML',name:'tugas negara',url:'https://drive.google.com/file/d/sikecilrenn',size:'45 KB'}]},
+{user:'massanzn_am',ava:'https://i.pravatar.cc/100?img=6',cap:'negro angin 🥰 #alightmotion #fyp #foryou 🥰',views:'12K',likes:'900',comments:8,links:[{type:'5MB',name:'negro angin',url:'https://alightcreative.com/am/share/massanzn',size:'5MB'}]},
+{user:'kiinhere',ava:'https://i.pravatar.cc/100?img=7',cap:'#fyp #xybca negro angin @ryaa ♡ #alightmotion #preset5mb #presetxml #fyp',views:'9K',likes:'1K',comments:15,links:[{type:'5MB',name:'negro angin',url:'https://alightcreative.com/am/share/kiinhere',size:'5MB'},{type:'XML',name:'negro angin xml',url:'https://drive.google.com/file/d/kiinherexml/view',size:'62 KB'}]},
+{user:'fede_theexplorer',ava:'https://i.pravatar.cc/100?img=8',cap:'The King is back 👑 #alightmotion #presetbawah5mb #preset5mb #preset',views:'40K',likes:'8K',comments:50,links:[{type:'5MB',name:'The King',url:'https://alightcreative.com/am/share/fede',size:'5MB'}]},
+];
+
+let currentTab='cari';
+function switchTab(t){
+currentTab=t;
+document.getElementById('tabUrl').classList.toggle('active',t==='url');
+document.getElementById('tabCari').classList.toggle('active',t==='cari');
+document.getElementById('descUrl').classList.toggle('hide',t!=='url');
+document.getElementById('descCari').classList.toggle('hide',t!=='cari');
+document.getElementById('inputSearch').placeholder=t==='url'?'https://vt.tiktok.com/xxxx':'Cari nama lagu atau kata kunci...';
+}
+
+function fillExample(txt){document.getElementById('inputSearch').value=txt; doSearch();}
+
+function liveSearch(v){
+if(v.length<2){document.getElementById('resultsArea').classList.add('hide');document.getElementById('stepsBox').classList.remove('hide');return;}
+}
+
+function doSearch(){
+let q=document.getElementById('inputSearch').value.trim().toLowerCase();
+if(!q) return;
+document.getElementById('stepsBox').classList.add('hide');
+document.getElementById('loadingPreset').classList.remove('hide');
+document.getElementById('resultsArea').classList.add('hide');
+setTimeout(()=>{
+document.getElementById('loadingPreset').classList.add('hide');
+let filtered=mockVideos.filter(v=>v.cap.toLowerCase().includes(q)||v.user.toLowerCase().includes(q));
+if(filtered.length===0) filtered=mockVideos;
+renderResults(filtered);
+},800);
+}
+
+function renderResults(list){
+document.getElementById('resCount').innerText=list.length+' videos';
+let html='';
+list.forEach((v,i)=>{
+html+=`<div class="video-card" onclick="openDetail(${i})">
+<div class="video-thumb"><img src="${v.ava}"></div>
+<div class="video-info">
+<div class="video-user">@${v.user} <i>• ${v.views}</i></div>
+<div class="video-cap">${v.cap}</div>
+<div class="video-tags">${v.links.map(l=>'#preset'+l.type.toLowerCase()).join(' ')}</div>
+</div>
+</div>`;
+});
+document.getElementById('videoList').innerHTML=html;
+document.getElementById('resultsArea').classList.remove('hide');
+}
+
+function openDetail(idx){
+let v=mockVideos[idx];
+document.getElementById('resultsArea').classList.add('hide');
+document.getElementById('loadingPreset').classList.remove('hide');
+setTimeout(()=>{
+document.getElementById('loadingPreset').classList.add('hide');
+let linksHtml='';
+v.links.forEach(l=>{
+linksHtml+=`<div class="preset-card">
+<div class="preset-name">${l.name} <span class="tag">${l.type}</span> <span class="tag">${l.size} BY THIS ACCOUNT</span></div>
+<div class="preset-link">${l.url}</div>
+<div class="preset-actions">
+<button class="btn-preset" onclick="window.open('${l.url}','_blank')">${l.type==='XML'?'Get file':'Open preset'}</button>
+<button class="btn-preset2" onclick="navigator.clipboard.writeText('${l.url}');alert('Link copied!')">Copy link</button>
+</div>
+</div>`;
+});
+document.getElementById('detailContent').innerHTML=`
+<div class="detail">
+<div class="detail-head"><div><b>Judul : ${v.cap.split('#')[0]}</b><p style="font-size:10px;opacity:.4;margin-top:4px">@${v.user} • ${v.views} views</p></div><span>dilzALG</span></div>
+<div class="detail-meta">
+<div class="meta-item"><p>ACCOUNT</p><b>@${v.user}</b></div>
+<div class="meta-item"><p>COMMENTS</p><b>${v.comments}</b></div>
+<div class="meta-item"><p>VIEWS</p><b>${v.views}</b></div>
+<div class="meta-item"><p>LIKES</p><b>${v.likes}</b></div>
+</div>
+<div class="preset-section">
+<div class="preset-head"><b>Preset links</b><span>${v.links.length}</span></div>
+${linksHtml}
+</div>
+</div>
+`;
+document.getElementById('detailArea').classList.remove('hide');
+},700);
+}
+
+function backToResults(){
+document.getElementById('detailArea').classList.add('hide');
+document.getElementById('resultsArea').classList.remove('hide');
+}
+
+// SPLASH LOGIC KYK VIDEO - 1% SAMPE 100%
+let pct=1;
+let bar=document.getElementById('bar');
+let pText=document.getElementById('pText');
+let splash=document.getElementById('splash');
+let app=document.getElementById('app');
+let interval=setInterval(()=>{
+pct+=Math.floor(Math.random()*18)+4;
+if(pct>=100){pct=100;clearInterval(interval);
+setTimeout(()=>{splash.classList.add('hide');app.classList.add('show');},400);
+}
+bar.style.width=pct+'%';
+pText.innerText=pct+'%';
+},120);
+
+// Auto search negro angin kyk di video pas awal
+setTimeout(()=>{if(document.getElementById('inputSearch').value==='negro angin') doSearch();},3500);
+</script>
+</body>
+</html>
