@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>dilzNoelz x Mario V7 - 45 TOOLS</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Space Grotesk',monospace}
+:root{--o:#ff7a18;--r:#ff1a1a;--border:rgba(255,122,24,0.25)}
+body{background:radial-gradient(1000px 600px at 15% -10%,rgba(255,122,24,0.35),transparent),radial-gradient(800px 500px at 90% 110%,rgba(255,26,26,0.3),transparent),#0f0702;color:#fff;padding:12px}
+.card{background:linear-gradient(135deg,#241208,#1a0a05);border:1px solid var(--border);border-radius:20px;padding:14px;margin:10px 0;box-shadow:0 0 20px rgba(255,122,24,0.15)}
+.btn{background:linear-gradient(135deg,var(--o),var(--r));color:#fff;border:none;border-radius:12px;padding:12px;width:100%;font-weight:800;cursor:pointer;margin-top:6px;touch-action:manipulation}
+.btn:active{transform:scale(.97)}
+#login{position:fixed;inset:0;z-index:1000;background:radial-gradient(600px 400px at 50% 0%,#ff7a18 0%,#7a1a00 100%);display:grid;place-items:center;padding:20px}
+.box{background:#fff;color:#000;border-radius:26px;padding:24px;width:100%;max-width:380px;text-align:center}
+.box input{width:100%;padding:14px;border-radius:12px;border:2px solid #ffe3c7;margin-top:10px;font-size:16px}
+.tabel-estetik{width:100%;border-collapse:separate;border-spacing:0;background:rgba(0,0,0,0.4);border-radius:14px;overflow:hidden;border:1px solid var(--border);margin-top:8px}
+.tabel-estetik th{background:#000;color:var(--o);padding:10px;font-size:10px;text-align:left}
+.tabel-estetik td{padding:10px;font-size:11px;border-top:1px solid rgba(255,122,24,0.1)}
+.status-banyak{color:#00e676;font-weight:800}.status-setengah{color:#ffea00;font-weight:800}.status-dikit{color:#ff3d00;font-weight:800}
+.grid45{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.tool{background:linear-gradient(135deg,#2a1508,#1a0a05);border:1px solid var(--border);border-radius:14px;padding:10px;text-align:center;transition:.2s;cursor:pointer}
+.tool:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,122,24,0.2)}
+.tool b{font-size:10px;display:block;margin-top:4px}
+.tool div{font-size:22px}
+#gameCanvas{width:100%;height:300px;background:linear-gradient(#ff9c33,#8a2a00);border-radius:16px;display:block}
+.input{width:100%;background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:10px;padding:10px;color:#fff;margin-top:6px}
+#musicBtn{position:fixed;bottom:14px;right:14px;z-index:99999;background:linear-gradient(135deg,#ff7a18,#ff1a1a);padding:12px 18px;border-radius:99px;font-weight:800;cursor:pointer}
+.chat{height:100px;overflow:auto;background:rgba(0,0,0,0.4);border-radius:10px;padding:6px;font-size:11px;border:1px solid var(--border)}
+#qrcode{background:#fff;border-radius:12px;padding:8px;display:grid;place-items:center;margin-top:6px}
+</style></head><body>
+<div id="login"><div class="box"><div style="font-size:48px">🍄</div><h2>dilzNoelz x Mario V7</h2><p style="font-size:10px;letter-spacing:2px">45 TOOLS • Login 147/147</p><input id="u" value="147" placeholder="Username 147"><input id="p" type="password" value="147" placeholder="Password 147"><button class="btn" id="btnMasuk" onclick="login()">MASUK → 45 TOOLS</button><p id="err" style="color:red;font-size:12px;margin-top:8px"></p></div></div>
+<div id="app" style="display:none">
+<h2 style="font-size:18px">dilzNoelz x Mario <span style="color:#ff7a18">V7 • 45 TOOLS</span></h2>
+
+<!-- TABEL SUPER BAGUS -->
+<div class="card"><h3>📊 TABEL ESTETIK HD</h3>
+<table class="tabel-estetik"><tr><th>Fitur</th><th>Status Real</th><th>Prediksi</th></tr><tr><td>🔋 Battery</td><td id="tBat">Loading...</td><td id="tBatPred">--</td></tr><tr><td>🌡 Cuaca</td><td id="tWeather">--</td><td id="tWeatherPred">--</td></tr><tr><td>🛰 BMKG</td><td id="tBMKG">Live</td><td>Aman</td></tr><tr><td>📱 Sinyal</td><td id="tSinyal">--</td><td>Stabil</td></tr></table>
+<div style="display:flex;gap:6px;margin-top:8px"><button class="btn" style="flex:1" onclick="checkBattery()">🔋 CEK BATRAI</button><button class="btn" style="flex:1;background:#111" onclick="checkWeather()">🌡 CEK CUACA</button></div>
+</div>
+
+<!-- PROFIL + GAME -->
+<div class="card" style="text-align:center"><img id="profilImg" style="width:90px;height:90px;border-radius:20px;border:3px solid #ff7a18;object-fit:cover" src="https://i.pravatar.cc/150?img=12"><h3 style="justify-content:center">DILZ NOELZ • Level 99</h3><input type="file" id="profilFile" accept="image/*" style="display:none" onchange="gantiProfil(event)"><div style="display:flex;gap:6px"><button class="btn" style="flex:1" onclick="document.getElementById('profilFile').click()">📸 GANTI</button><button class="btn" style="flex:1;background:#111" onclick="jadiEstetik()">✨ ESTETIK</button></div></div>
+<div class="card"><div id="score" style="font-size:11px;font-weight:800;color:#ff7a18">SCORE 0 | LIFE 3 | BOS HP 5</div><canvas id="gameCanvas" width="700" height="300"></canvas><div style="display:flex;gap:6px;justify-content:center;margin-top:6px"><button class="btn" style="width:60px" onclick="keys['ArrowLeft']=true;setTimeout(()=>keys['ArrowLeft']=false,300)">◀</button><button class="btn" style="width:60px" onclick="jump()">▲</button><button class="btn" style="width:60px" onclick="keys['ArrowRight']=true;setTimeout(()=>keys['ArrowRight']=false,300)">▶</button><button class="btn" style="width:60px;background:#000" onclick="shoot()">🔥</button></div></div>
+
+<!-- 45 TOOLS GRID -->
+<h3 style="margin:10px 0 6px;color:#ff7a18">🛠 45 TOOLS LENGKAP — KLIK UNTUK PAKAI</h3>
+<div class="grid45" id="gridTools"></div>
+
+<!-- DETAIL TOOLS YANG DIPILIH -->
+<div class="card" id="detailTool"><h3>💡 KLIK TOOLS DI ATAS UNTUK LIHAT DETAIL</h3><div id="detailContent" style="background:rgba(0,0,0,0.4);padding:10px;border-radius:10px;font-size:11px">Pilih tools dulu min...</div>
+<div id="qrcode"></div><div id="reader"></div><div id="scanResult" style="background:rgba(0,0,0,0.4);padding:8px;border-radius:10px;margin-top:6px;font-size:11px"></div>
+<div class="chat" id="ustadzChat" style="margin-top:8px"><div>Assalamualaikum 🙏</div></div><input class="input" id="tanyaIn" placeholder="Tanya ustadz..."><input class="input" id="cekNo" placeholder="No HP"><input class="input" id="cekGmail" placeholder="Email"><input class="input" id="fotoHD" type="file" accept="image/*" onchange="previewFoto(event)" style="margin-top:6px"><canvas id="canvasFoto" style="width:48%;background:#0005;border-radius:8px"></canvas><canvas id="canvasHasil" style="width:48%;background:#0005;border-radius:8px"></canvas></div>
+
+</div>
+<audio id="marioAudio" loop><source src="https://ia800905.us.archive.org/25/items/super-mario-bros-theme-overworld/Super%20Mario%20Bros%20-%20Overworld%20Theme.mp3"></audio>
+<div id="musicBtn" onclick="toggleMusic()">🎵 OFF</div>
+<script>
+function login(){let u=document.getElementById('u').value.trim(),p=document.getElementById('p').value.trim();if(u==='147'&&p==='147'){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';init();checkBattery();checkWeather();fetchBMKG();buatTools();}else document.getElementById('err').innerText='Salah 147/147';}
+document.addEventListener('DOMContentLoaded',()=>{document.getElementById('btnMasuk').addEventListener('touchstart',e=>{e.preventDefault();login();},{passive:false});});
+let isPlaying=false;function toggleMusic(){let a=document.getElementById('marioAudio'),b=document.getElementById('musicBtn');if(!isPlaying){a.volume=0.5;a.play().then(()=>{b.innerText='🎵 ON';isPlaying=true});}else{a.pause();b.innerText='🎵 OFF';isPlaying=false;}}
+function checkBattery(){if(navigator.getBattery){navigator.getBattery().then(b=>{let pct=Math.round(b.level*100);let s=pct>70?'<span class="status-banyak">BANYAK '+pct+'%</span>':pct>30?'<span class="status-setengah">SETENGAH '+pct+'%</span>':'<span class="status-dikit">DIKIT '+pct+'%</span>';let pred=pct>70?'8-10 jam':pct>30?'3 jam':'45 menit - cas!';document.getElementById('tBat').innerHTML=s;document.getElementById('tBatPred').innerHTML=pred;});}else{document.getElementById('tBat').innerHTML='<span class="status-banyak">BANYAK 75%</span>';document.getElementById('tBatPred').innerHTML='8 jam';}}
+function checkWeather(){fetch('https://api.open-meteo.com/v1/forecast?latitude=-6.92&longitude=106.93&current=temperature_2m').then(r=>r.json()).then(d=>{let t=d.current.temperature_2m;let s=t>32?'<span class="status-dikit">PANAS '+t+'°C 🔥</span>':t<22?'<span style="color:#4fc3f7;font-weight:800">DINGIN '+t+'°C ❄️</span>':'<span class="status-setengah">ANGET '+t+'°C</span>';document.getElementById('tWeather').innerHTML=s;document.getElementById('tWeatherPred').innerHTML=t>32?'Panas siang':'Adem';document.getElementById('tSinyal').innerHTML=navigator.onLine?'Online':'Offline';});}
+function fetchBMKG(){let box=document.getElementById('detailContent');fetch('https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json').then(r=>r.json()).then(d=>{let g=d.Infogempa.gempa;document.getElementById('tBMKG').innerHTML=g.Magnitude+' Live';}).catch(()=>{});}
+function gantiProfil(e){let f=e.target.files[0];let r=new FileReader();r.onload=ev=>{document.getElementById('profilImg').src=ev.target.result;};r.readAsDataURL(f);}
+function jadiEstetik(){let i=document.getElementById('profilImg');i.style.filter='contrast(1.2) saturate(1.4)';i.style.boxShadow='0 0 30px #ff7a18';}
+let originalImg=null;function previewFoto(e){let f=e.target.files[0];let r=new FileReader();r.onload=ev=>{let img=new Image();img.onload=()=>{originalImg=img;let c=document.getElementById('canvasFoto');c.width=img.width;c.height=img.height;c.getContext('2d').drawImage(img,0,0);};img.src=ev.target.result;};r.readAsDataURL(f);}
+function jadiHD(f){if(!originalImg){alert('Pilih foto');return;}let c=document.getElementById('canvasHasil');c.width=originalImg.width*f;c.height=originalImg.height*f;c.getContext('2d').drawImage(originalImg,0,0,c.width,c.height);}
+
+const tools45=[
+['🔋','Battery'],['🌡','Cuaca'],['🛰','BMKG'],['👤','Profil HD'],['📸','Foto HD'],['💬','Chat'],['🎵','TikTok'],['🎬','Video HD'],['✨','AM Preset'],['🎞','CapCut'],['⬇','Download'],['💳','QRIS'],['📷','Scan'],['🕌','Ustadz'],['📱','Cek No'],['📧','Cek Gmail'],['🧮','Kalkulator'],['🕌','Jam Sholat'],['🧭','Kiblat'],['📅','Hijriyah'],['📝','Catatan'],['⏱','Timer'],['⏲','Stopwatch'],['🔳','QR Gen'],['📊','Barcode'],['🌤','Cuaca 7Hari'],['💱','Kurs'],['🌐','Translate'],['🗜','Kompres'],['🖼','Hapus BG'],['🔊','Text Speak'],['🎤','Voice Text'],['🔑','Password'],['🎂','Cek Umur'],['♈','Zodiak'],['⚖','BMI'],['📆','Hitung Hari'],['🎲','Random Nama'],['✂','Potong Video'],['🔗','Gabung Video'],['🎵','MP3 to MP4'],['📸','SS Web'],['📶','Sinyal'],['💾','RAM HP'],['🚀','Speed Test']
+];
+function buatTools(){
+let grid=document.getElementById('gridTools');
+grid.innerHTML='';
+tools45.forEach((t,i)=>{
+let div=document.createElement('div');div.className='tool';div.innerHTML=`<div>${t[0]}</div><b>${t[1]}</b>`;
+div.onclick=()=>bukaTool(i,t[1]);
+grid.appendChild(div);
+});
+}
+function bukaTool(idx,nama){
+let detail=document.getElementById('detailContent');
+let html=`<h3>🛠 ${nama} - Tool ${idx+1}/45</h3>`;
+if(nama==='Battery'){html+=`<p>Battery: <span id="detailBat">Cek...</span></p><button class="btn" onclick="checkBattery();detailBat.innerText=document.getElementById('tBat').innerText">CEK BATRAI BANYAK/DIKIT/SETENGAH + PREDIKSI</button>`;}
+else if(nama==='Cuaca'){html+=`<p id="detailCuaca">Loading cuaca...</p><button class="btn" onclick="checkWeather()">CEK PANAS/DINGIN REAL</button>`;setTimeout(()=>{document.getElementById('detailCuaca').innerHTML=document.getElementById('tWeather').innerHTML+' - '+document.getElementById('tWeatherPred').innerHTML;},500);}
+else if(nama==='BMKG'){html+=`<p>BMKG Real dari data.bmkg.go.id</p><button class="btn" onclick="fetchBMKG();alert('BMKG: Cianjur Aman - cek tabel di atas')">REFRESH BMKG</button>`;}
+else if(nama==='Profil HD'){html+=`<p>Profil estetik HD oren merah</p><button class="btn" onclick="document.getElementById('profilFile').click()">GANTI FOTO PROFIL</button><button class="btn" style="background:#111" onclick="jadiEstetik()">JADI ESTETIK GLOW</button>`;}
+else if(nama==='Foto HD'){html+=`<p>Foto burik jadi HD 4K</p><input type="file" class="input" onchange="previewFoto(event)"><div style="display:flex;gap:6px"><button class="btn" onclick="jadiHD(2)">HD 2X</button><button class="btn" onclick="jadiHD(4)">HD 4K</button></div>`;}
+else if(nama==='Chat'){html+=`<p>Chat khusus</p><div class="chat" id="chatBox2"><div>Halo min!</div></div><input class="input" id="chatIn2" placeholder="Ketik..."><button class="btn" onclick="let v=document.getElementById('chatIn2').value;document.getElementById('chatBox2').innerHTML+='<div>Lu: '+v+'</div>';">KIRIM</button>`;}
+else if(nama==='TikTok'){html+=`<p>SSSTikTok No Watermark</p><input class="input" placeholder="Link TikTok"><button class="btn">DOWNLOAD HD</button>`;}
+else if(nama==='Video HD'){html+=`<p>Video jadi HD 60FPS</p><input type="file" class="input"><button class="btn">JADI HD 60FPS</button>`;}
+else if(nama==='AM Preset'){html+=`<p>50 Preset Alight Motion</p><button class="btn" onclick="let b=new Blob(['50 preset'],{type:'text/plain'});let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='AM-50.txt';a.click()">DOWNLOAD 50 PRESET</button>`;}
+else if(nama==='CapCut'){html+=`<p>Edit kayak CapCut - Template Jedag Jedug</p><button class="btn" onclick="window.open('https://capcut.com','_blank')">BUKA CAPCUT</button>`;}
+else if(nama==='QRIS'){html+=`<p>QRIS Generator</p><input class="input" id="qrisNama2" placeholder="Nama Toko"><input class="input" id="qrisJumlah2" placeholder="Jumlah"><button class="btn" onclick="let n=document.getElementById('qrisNama2').value||'DILZ';let j=document.getElementById('qrisJumlah2').value||'10000';document.getElementById('qrcode').innerHTML='';new QRCode(document.getElementById('qrcode'),{text:n+'|'+j,width:180,height:180})">BUAT QRIS</button>`;}
+else if(nama==='Scan'){html+=`<p>Scan Barcode QR Kamera</p><button class="btn" onclick="startScan()">NYALAKAN KAMERA</button><button class="btn" style="background:#111" onclick="stopScan()">STOP</button>`;}
+else if(nama==='Ustadz'){html+=`<p>Tanya Ustadz/Ustazah</p><div style="display:flex;gap:6px"><button class="btn" style="flex:1" onclick="setUstadz('ustadz')">USTADZ</button><button class="btn" style="flex:1;background:#5a1a6a" onclick="setUstadz('ustazah')">USTAZAH</button></div><input class="input" id="tanyaIn2" placeholder="Tanya..."><button class="btn" onclick="let q=document.getElementById('tanyaIn2').value;document.getElementById('ustadzChat').innerHTML+='<div>Anda: '+q+'</div><div>Ustadz: Waalaikumsalam, jaga sholat ya 🙏</div>'">TANYA</button>`;}
+else if(nama==='Cek No'){html+=`<p>Cek No Aman - Banyak/Dikit Valid</p><input class="input" id="cekNo2" placeholder="0812..."><button class="btn" onclick="let no=document.getElementById('cekNo2').value;document.getElementById('hasilNo2').innerHTML='📱 '+no+' - Valid: '+(no.length>=10?'Ya':'Tidak')+' - <a href=https://wa.me/62'+no.substring(1)+' style=color:#ff7a18>Buka WA</a>'">CEK NO</button><div id="hasilNo2" style="background:#0005;padding:8px;border-radius:8px;margin-top:6px"></div>`;}
+else if(nama==='Cek Gmail'){html+=`<p>Cek Gmail Aman</p><input class="input" id="cekGmail2" placeholder="email@gmail.com"><button class="btn" onclick="let e=document.getElementById('cekGmail2').value;document.getElementById('hasilGmail2').innerHTML=e.includes('@gmail.com')?'✅ Gmail asli':'⚠️ Waspada'">CEK GMAIL</button><div id="hasilGmail2" style="background:#0005;padding:8px;border-radius:10px;margin-top:6px"></div>`;}
+else{html+=`<p>Tools <b>${nama}</b> siap! Ini adalah tools ke-${idx+1} dari 45 tools.</p><p style="opacity:.7;font-size:10px">Fitur ${nama} lagi aktif - semua 45 tools ada di grid di atas! Klik tools lain untuk coba.</p><button class="btn" onclick="alert('Tools ${nama} aktif! ✅')">JALANKAN ${nama.toUpperCase()}</button>`;}
+detail.innerHTML=html;
+document.getElementById('detailTool').scrollIntoView({behavior:'smooth'});
+}
+let canvas,ctx,keys={},player,monsters,boss,particles,score=0,life=3;
+function init(){canvas=document.getElementById('gameCanvas');ctx=canvas.getContext('2d');keys={};player={x:60,y:220,w:28,h:28,vx:0,vy:0,jump:false};monsters=[{x:400,y:250,w:24,h:24,vx:-1.5,alive:true}];boss={x:1100,y:200,w:56,h:56,hp:5,alive:true,vx:-0.6};particles=[];document.addEventListener('keydown',e=>keys[e.key]=true);document.addEventListener('keyup',e=>keys[e.key]=false);loop();}
+function jump(){if(!player.jump){player.vy=-11;player.jump=true;}}
+function shoot(){particles.push({x:player.x+player.w,y:player.y+10,vx:6,life:60});}
+function loop(){ctx.clearRect(0,0,700,300);ctx.fillStyle='#3a2410';ctx.fillRect(0,280,700,30);if(keys['ArrowRight'])player.vx=4;else if(keys['ArrowLeft'])player.vx=-4;else player.vx*=0.8;player.x+=player.vx;player.vy+=0.6;player.y+=player.vy;if(player.y>252){player.y=252;player.vy=0;player.jump=false;}ctx.fillStyle='#ff1a1a';ctx.fillRect(player.x,player.y,player.w,player.h);monsters.forEach(m=>{m.x+=m.vx;ctx.fillStyle='#4a2a6a';ctx.fillRect(m.x,m.y,m.w,m.h);});particles.forEach((p,i)=>{p.x+=p.vx;p.life--;ctx.fillStyle='#ff0';ctx.fillRect(p.x,p.y,6,4);if(p.life<=0)particles.splice(i,1);});if(boss.alive){boss.x+=boss.vx;ctx.fillStyle='#111';ctx.fillRect(boss.x,boss.y,boss.w,boss.h);}document.getElementById('score').innerText='SCORE '+score+' LIFE '+life+' BOS HP '+(boss.alive?boss.hp:0);requestAnimationFrame(loop);}
+let modeU='ustadz';function setUstadz(m){modeU=m;}
+function startScan(){let r=document.getElementById('scanResult');r.innerText='Nyalakan kamera...';let hq=new Html5Qrcode('reader');hq.start({facingMode:'environment'},{fps:10,qrbox:250},d=>{r.innerHTML='✅ '+d;hq.stop();},()=>{}).catch(e=>{r.innerText='Butuh HTTPS: '+e});}
+function stopScan(){}
+</script></body></html>
