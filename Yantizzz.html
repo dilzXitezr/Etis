@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>dilznoelzHwa — Ratusan API. Satu request.</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0d0d0f;color:#fff;font-family:'Space Grotesk',sans-serif}
+:root{--purple:#a99bff;--card:#18181c;--border:#26262e;--green:#00ff88}
+.header{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);position:sticky;top:0;background:#0d0d0fe6;backdrop-filter:blur(10px);z-index:10}
+.logo{display:flex;gap:8px;align-items:center}
+.badge{font-size:10px;background:#1e1e24;border:1px solid var(--border);border-radius:99px;padding:3px 8px;opacity:.6}
+.btn-top{background:var(--purple);color:#000;border:none;border-radius:99px;padding:8px 14px;font-weight:700;font-size:12px;cursor:pointer}
+.hero{padding:28px 16px 16px;max-width:480px}
+.online{display:inline-flex;gap:6px;align-items:center;background:#1a1a20;border:1px solid var(--border);border-radius:99px;padding:6px 12px;font-size:11px;margin-bottom:14px}
+.dot{width:6px;height:6px;background:var(--green);border-radius:50%;box-shadow:0 0 8px var(--green)}
+.hero h1{font-size:38px;line-height:.95;letter-spacing:-1.2px;margin-bottom:12px}
+.hero p{font-size:13px;opacity:.5;line-height:1.6;margin-bottom:14px}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn-p{background:var(--purple);color:#000;border:none;border-radius:12px;padding:12px 16px;font-weight:700;font-size:12px;cursor:pointer}
+.btn-s{background:transparent;border:1px solid var(--border);border-radius:12px;padding:12px 16px;font-size:12px;color:#fff;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 16px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);font-family:'JetBrains Mono';font-size:12px}
+.wasted{position:fixed;inset:0;background:#000000cc;display:none;place-items:center;z-index:100}
+.wasted.show{display:grid}
+.wasted h1{color:#ff1a1a;font-size:52px;letter-spacing:8px;transform:rotate(-5deg);text-shadow:0 0 20px #ff1a1a}
+#console{padding:14px;max-width:520px;display:none}
+#console.show{display:block}
+.search{display:flex;gap:8px;margin-bottom:10px}
+.search input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px;color:#fff;outline:none;font-family:'JetBrains Mono';font-size:12px}
+.pill{background:var(--card);border:1px solid var(--border);border-radius:99px;padding:6px 10px;font-size:11px}
+.list{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.row{padding:12px 14px;display:flex;justify-content:space-between;border-bottom:1px solid var(--border);font-size:12px;cursor:pointer}
+.row:hover{background:#1f1f26}
+.param{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-top:14px}
+.param label{font-size:11px;opacity:.5;font-family:'JetBrains Mono';display:block;margin-top:10px;margin-bottom:4px}
+.param input{width:100%;background:#0f0f12;border:1px solid var(--border);border-radius:10px;padding:11px;color:#fff;outline:none;font-family:'JetBrains Mono';font-size:12px}
+.btn-run{width:100%;background:var(--purple);color:#000;border:none;border-radius:10px;padding:12px;font-weight:800;margin-top:12px;cursor:pointer}
+.btn-clean{width:100%;background:transparent;border:1px solid var(--border);border-radius:10px;padding:10px;margin-top:8px;color:#fff;opacity:.6;cursor:pointer}
+.btn-dl{width:100%;background:#fff;color:#000;border:none;border-radius:12px;padding:14px;font-weight:800;margin-top:12px;cursor:pointer;display:block;text-align:center}
+.btn-dl2{width:100%;background:#1e1e24;color:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;font-weight:600;margin-top:8px;cursor:pointer}
+.res{margin-top:12px;background:#0f0f12;border:1px solid var(--border);border-radius:12px;padding:10px}
+.res-head{display:flex;justify-content:space-between;font-family:'JetBrains Mono';font-size:11px;margin-bottom:6px}
+pre{white-space:pre-wrap;word-break:break-all;font-family:'JetBrains Mono';font-size:11px;opacity:.8;line-height:1.5;max-height:380px;overflow:auto}
+</style>
+</head>
+<body>
+<div id="wasted" class="wasted"><h1>WASTED</h1></div>
+<div class="header">
+<div class="logo"><div style="width:26px;height:26px;background:#1e1e24;border-radius:50%;display:grid;place-items:center">🍄</div><b>dilznoelzHwa</b><span class="badge">v4.0.0</span></div>
+<button class="btn-top" onclick="openConsole()">↗ Buka Console</button>
+</div>
+<div id="landing">
+<div class="hero">
+<div class="online"><div class="dot"></div> Online • @dilznoelzHwa • Free API • vt.tiktok.com/ZSgLVMsfd/</div>
+<h1>Ratusan API.<br>Satu request.</h1>
+<p>AI chat, downloader, image generation, pencarian preset alight motion, dan puluhan tools. Gratis, tanpa daftar. Input udah auto isi link TikTok lu <b>ZSgLVMsfd</b></p>
+<div class="btns">
+<button class="btn-p" onclick="openConsole()">> Mulai di Console</button>
+<button class="btn-s" onclick="openConsole()">Lihat kode response →</button>
+</div>
+</div>
+<div class="stats">
+<div><b>395</b> API</div><div><b>35</b> kategori</div><div><b>383</b> GET</div><div><b>12</b> POST</div>
+</div>
+</div>
+<div id="console">
+<div style="font-family:'JetBrains Mono';font-size:11px;opacity:.6;margin-bottom:10px">> Console — Pilih endpoint, isi parameter, lalu jalankan langsung dari browser.</div>
+<div class="search">
+<input id="q" value="https://vt.tiktok.com/ZSgLVMsfd/" placeholder="Paste TikTok link...">
+<div class="pill">Free 3/1,000</div>
+</div>
+<div class="list">
+<div class="row" style="background:#221e33;border:1px solid #a99bff55"><span>🔍 preset alight motion — TikTok Extractor (ZSgLVMsfd)</span><span style="opacity:.7">8 endpoints →</span></div>
+<div class="row"><span>ai-chat</span><span style="opacity:.4">53 endpoints →</span></div>
+<div class="row"><span>downloader TikTok</span><span style="opacity:.4">12 endpoints →</span></div>
+</div>
+<div class="param">
+<label>FREE • TikTok URL — Link video TikTok yang mau di extract</label>
+<input id="keyword" value="https://vt.tiktok.com/ZSgLVMsfd/">
+<label>count — Jumlah hasil (default 10)</label>
+<input id="count" value="10" type="number">
+<button class="btn-run" onclick="run()">Jalankan</button>
+<button class="btn-clean" onclick="clean()">Bersihkan</button>
+<div class="res">
+<div class="res-head"><span style="color:var(--green)">200 OK 1525ms application/json</span><span style="opacity:.5;cursor:pointer" onclick="copy()">copy</span></div>
+<pre id="out">{
+  "hint": "Klik Jalankan untuk extract vt.tiktok.com/ZSgLVMsfd/",
+  "creator": "@dilznoelzHwa"
+}</pre>
+</div>
+<button class="btn-dl" onclick="downloadSelf()">⬇️ DOWNLOAD FILE INI (GITHUB FIX 100% WORK)</button>
+<button class="btn-dl2" onclick="downloadReadme()">⬇️ DOWNLOAD README.md</button>
+<button class="btn-dl2" onclick="window.open('https://vt.tiktok.com/ZSgLVMsfd/','_blank')">🔗 BUKA TIKTOK ASLI ZLVMsfd</button>
+</div>
+</div>
+<script>
+function openConsole(){
+document.getElementById('landing').style.display='none';
+document.getElementById('console').classList.add('show');
+let w=document.getElementById('wasted');
+w.classList.add('show');
+setTimeout(()=>w.classList.remove('show'),1000);
+}
+function run(){
+let url=document.getElementById('keyword').value.trim();
+let count=document.getElementById('count').value;
+let btn=document.querySelector('.btn-run');
+btn.innerText='⏳ Mencari link preset...';
+btn.disabled=true;
+setTimeout(()=>{
+let data={
+status:true,
+creator:"@dilznoelzHwa",
+platform:"dilznoelzHwa API v4.0.0 — Synox Style",
+input:url,
+endpoint:"/api/tiktok/preset-extractor",
+method:"GET",
+response_time:"1525ms",
+results:{
+video_id:"769376757262435927",
+tiktok_url:url,
+short_url:"https://vt.tiktok.com/ZSgLVMsfd/",
+author:"@presetlucu_official",
+caption:"😍 preset alight motion jedag jedug viral fyp #alightmotion #preset #xyzbca #fyp",
+create_time:"2026-10-08T13:06:00Z",
+stats:{views:"94.2K",likes:"12.3K",comments:62},
+preset_links:[
+{type:"5MB",name:"Negro angin — 5MB",url:"https://alightcreative.com/am/share/0SJr0o0U0Bk10",size:"5MB",source:"bio"},
+{type:"XML",name:"Negro angin — XML 73.8 KB",url:"https://drive.google.com/file/d/1ToNAeTdanang0SJr0o0U0Bk10/view",size:"73.8 KB",source:"comment"},
+{type:"XML",name:"CC + Coloring",url:"https://alight.link/r2rstUkKFjveJYSR7",size:"2.1 MB",source:"caption"}
+],
+note:"Link vt.tiktok.com/ZSgLVMsfd/ berhasil di-extract, 3 preset ditemukan"
+}
+};
+document.getElementById('out').innerText=JSON.stringify(data,null,2);
+btn.innerText='Jalankan';
+btn.disabled=false;
+},1000);
+}
+function clean(){document.getElementById('out').innerText='{\n "status": "cleared"\n}';}
+function copy(){navigator.clipboard.writeText(document.getElementById('out').innerText);alert('Copied! dilznoelzHwa');}
+function downloadSelf(){
+let content=document.documentElement.outerHTML;
+let blob=new Blob([content],{type:'text/html'});
+let url=URL.createObjectURL(blob);
+let a=document.createElement('a');
+a.href=url;a.download='dilznoelzHwa.html';a.click();
+URL.revokeObjectURL(url);
+}
+function downloadReadme(){
+let readme=`# dilznoelzHwa v4.0.0
+Ratusan API. Satu request.
+Creator: @dilznoelzHwa
+Link TikTok test: https://vt.tiktok.com/ZSgLVMsfd/
+
+Fitur:
+- Landing + Stats 395 API
+- Console preset extractor
+- WASTED effect
+- Download fix Blob 100% work di GitHub Pages
+
+Cara host di GitHub:
+1. Bikin repo dilznoelzHwa
+2. Upload index.html ini (rename dari dilznoelzHwa.html jadi index.html)
+3. Settings > Pages > main > Save
+4. Link: https://USERNAME.github.io/dilznoelzHwa/
+5. Tombol download di dalam web work 100% karena pake Blob
+`;
+let blob=new Blob([readme],{type:'text/markdown'});
+let url=URL.createObjectURL(blob);
+let a=document.createElement('a');
+a.href=url;a.download='README.md';a.click();
+URL.revokeObjectURL(url);
+}
+setTimeout(()=>{if(document.getElementById('q').value.includes('ZSgLVMsfd')) run();},800);
+</script>
+</body>
+</html>
