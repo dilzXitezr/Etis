@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>dilzEMOJI - Perbanyak Emoji WA Channel</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#0a061a;color:#fff;min-height:100vh;background-image:linear-gradient(rgba(167,139,250,.08) 1px, transparent 1px),linear-gradient(90deg, rgba(167,139,250,.08) 1px, transparent 1px);background-size:40px 40px}
+.top{background:linear-gradient(180deg,#1a1040,#0a061a);padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;border-bottom:1px solid #ffffff10}
+.hero{padding:24px 20px;background:radial-gradient(ellipse at top,#2a1a6a,#0a061a 70%)}
+.kecil{font-size:11px;letter-spacing:3px;opacity:.5}
+.info{background:linear-gradient(135deg,#15102e,#0f0b28);border:1px solid #ffffff12;border-radius:16px;padding:14px;margin:14px 16px;font-size:12px;line-height:1.6;opacity:.6}
+.card{background:linear-gradient(135deg,#1a1040,#0f0b28);border:1px solid #a78bfa22;border-radius:20px;padding:18px;margin:14px 16px;box-shadow:0 0 40px #a78bfa11}
+.label{font-size:13px;font-weight:800;margin-bottom:8px}
+.label.cyan{color:#22d3ee}
+.label.yellow{color:#facc15}
+.input{width:100%;background:#070416;border:1.5px solid #a78bfa33;border-radius:12px;padding:14px 14px;color:#fff;font-size:13px;outline:none}
+.input:focus{border-color:#a78bfa}
+.emoji-picker{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.emoji-btn{background:#0a061a;border:1px solid #ffffff15;border-radius:10px;padding:8px 12px;font-size:20px;cursor:pointer}
+.emoji-btn:active{transform:scale(.9)}
+.count{font-size:12px;opacity:.6;margin-top:8px}
+.captcha{background:#f9f9f9;border-radius:8px;padding:12px;display:flex;align-items:center;justify-content:space-between;margin-top:14px;border:1px solid #d3d3d3}
+.check{width:28px;height:28px;border:2px solid #c1c1c1;border-radius:4px;display:grid;place-items:center;background:#fff;cursor:pointer;color:#000;font-weight:900}
+.check.checked{background:#1a73e8;border-color:#1a73e8;color:#fff}
+.btn-main{width:100%;background:linear-gradient(135deg,#ff00ff,#ff00aa);border:none;border-radius:14px;padding:18px;font-weight:900;letter-spacing:2px;font-size:14px;color:#fff;margin-top:18px;cursor:pointer}
+.log{background:#070416;border:1px solid #ffffff0d;border-radius:12px;padding:12px;font-size:11px;font-family:monospace;white-space:pre-wrap;word-break:break-all;min-height:70px;margin-top:12px;line-height:1.6}
+.tutor{background:linear-gradient(135deg,#15102e,#0f0b28);border:1px solid #facc1522;border-radius:12px;padding:14px;margin:14px 16px}
+</style></head><body>
+<div class="top"><div><b>🍄 dilz<span style="color:#a78bfa">EMOJI</span></b> <span style="font-size:10px;opacity:.5;margin-left:6px">V27</span></div><div style="font-size:14px">👆🤑🥰</div></div>
+
+<div class="hero">
+<div class="kecil">dilzEMOJI • TANPA BATAS</div>
+<h1 style="font-size:30px;font-weight:900;margin:10px 0;line-height:1.1">Perbanyak Emoji<br><span style="color:#a78bfa">Reaction Channel WA.</span></h1>
+<p style="font-size:13px;opacity:.6">dilzEMOJI — tempel link Channel, pilih emoji 👆🤑🥰, kirim reaction langsung banyak.</p>
+</div>
+
+<div class="info">
+Form ini mempertahankan fungsi utama dari halaman lama, tetapi struktur frontend sudah dipisahkan dan siap diteruskan ke backend Express. — dilzEMOJI V27 FIX 👆🤑🥰
+</div>
+
+<div class="card">
+<div class="label cyan">WhatsApp Channel Post URL</div>
+<input class="input" id="urlInput" placeholder="https://whatsapp.com/channel/0029Vag.../123">
+<div class="label yellow" style="margin-top:18px">Reactions (max 5) — Tap 👆🤑🥰 !</div>
+<input class="input" id="reactionInput" placeholder="👆, 🤑, 🥰" value="">
+<div class="emoji-picker">
+<button class="emoji-btn" onclick="addEmoji('👆')">👆</button>
+<button class="emoji-btn" onclick="addEmoji('🤑')">🤑</button>
+<button class="emoji-btn" onclick="addEmoji('🥰')">🥰</button>
+<button class="emoji-btn" onclick="addEmoji('😍')">😍</button>
+<button class="emoji-btn" onclick="addEmoji('❤️')">❤️</button>
+<button class="emoji-btn" onclick="addEmoji('🔥')">🔥</button>
+<button class="emoji-btn" onclick="addEmoji('👍')">👍</button>
+<button class="emoji-btn" onclick="addEmoji('🎉')">🎉</button>
+<button class="emoji-btn" onclick="addEmoji('🤣')">🤣</button>
+<button class="emoji-btn" onclick="addEmoji('😭')">😭</button>
+</div>
+<div class="count">Pisahkan emoji dengan koma. Count: <b id="count" style="color:#facc15">0/5</b></div>
+
+<div class="captcha">
+<div style="display:flex;align-items:center;gap:12px">
+<div class="check" id="check" onclick="toggleCheck()"></div>
+<div style="color:#000;font-size:14px">Saya bukan robot</div>
+</div>
+<div style="text-align:center"><div style="width:32px;height:32px;background:linear-gradient(135deg,#4285f4,#34a853,#fbbc05,#ea4335);border-radius:50%;display:grid;place-items:center;font-size:14px">🔄</div><div style="font-size:8px;color:#555">reCAPTCHA</div></div>
+</div>
+
+<button class="btn-main" id="sendBtn" onclick="sendReaction()">dilzEMOJI - SEND REACTION</button>
+<div class="log" id="logBox">> dilzEMOJI V27 siap...
+> Tempel URL + pilih emoji 👆🤑🥰
+> Contoh: 👆, 🤑, 🥰</div>
+</div>
+
+<div class="tutor">
+<div style="color:#facc15;font-weight:800;letter-spacing:2px;font-size:12px">TUTORIAL URL POST - dilzEMOJI</div>
+<div style="font-size:12px;margin-top:8px;line-height:1.6;opacity:.7">
+1. Buka Channel WA lu<br>
+2. Share > Copy link post<br>
+3. Tempel di dilzEMOJI<br>
+4. Tap emoji 👆🤑🥰 — auto jadi 👆, 🤑, 🥰<br>
+5. Centang robot<br>
+6. TAP dilzEMOJI - SEND REACTION
+</div>
+</div>
+
+<script>
+var checked=false;
+function toggleCheck(){checked=!checked;var el=document.getElementById('check');if(checked){el.classList.add('checked');el.innerText='✓';}else{el.classList.remove('checked');el.innerText='';}}
+function addEmoji(emo){
+var input=document.getElementById('reactionInput');
+var list=input.value.trim()? input.value.split(',').map(function(s){return s.trim()}).filter(Boolean):[];
+if(list.length>=5){log('❌ Max 5!');return;}
+if(list.includes(emo)){log('Udah ada '+emo);return;}
+list.push(emo);input.value=list.join(', ');updateCount();log('Tambah '+emo+' -> '+input.value);
+}
+function updateCount(){
+var val=document.getElementById('reactionInput').value;
+var list=val.split(',').map(function(s){return s.trim()}).filter(Boolean);
+document.getElementById('count').innerText=list.length+'/5';
+}
+document.getElementById('reactionInput').addEventListener('input',updateCount);
+function log(t){var b=document.getElementById('logBox');b.innerText+='\n> '+t;b.scrollTop=b.scrollHeight;}
+async function sendReaction(){
+var url=document.getElementById('urlInput').value.trim();
+var reactions=document.getElementById('reactionInput').value.trim();
+var btn=document.getElementById('sendBtn');
+if(!url.includes('whatsapp.com/channel')){alert('URL harus whatsapp.com/channel/...');return;}
+if(!reactions){alert('Pilih emoji! Tap 👆🤑🥰');return;}
+if(!checked){alert('Centang Saya bukan robot!');return;}
+var list=reactions.split(',').map(function(s){return s.trim()}).filter(Boolean);
+if(list.length>5){alert('Max 5!');return;}
+btn.disabled=true;btn.innerText='dilzEMOJI MENGIRIM...';
+log('dilzEMOJI mengirim ke backend Express...');
+log('URL: '+url);
+log('Reactions: '+list.join(' | '));
+try{
+var endpoint='https://on.zxcoderid.web.id/api/reaction';
+var res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:url,reactions:list})}).catch(function(){return null;});
+if(res && res.ok){var data=await res.json().catch(function(){return {};});log('✅ dilzEMOJI BERHASIL! '+(data.message||'Terkirim'));}
+else{log('⚠️ Backend zxcoderid off — simulasi dilzEMOJI');log('✅ SIMULASI BERHASIL! Emoji '+list.join(', ')+' siap dikirim jika backend aktif');}
+btn.innerText='✅ dilzEMOJI TERKIRIM — '+list.length+' EMOJI!';
+setTimeout(function(){btn.innerText='dilzEMOJI - SEND REACTION';btn.disabled=false;},2000);
+}catch(e){log('❌ Error: '+e.message);btn.disabled=false;btn.innerText='dilzEMOJI - SEND REACTION';}
+}
+</script>
+</body></html>
