@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>dilznoelzHwa — Ratusan API. Satu request.</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0c0c0d;color:#fff;font-family:'Space Grotesk',sans-serif;overflow-x:hidden}
+:root{--purple:#9b8cff;--purple2:#b8a6ff;--card:#17171a;--border:#26262b;--green:#00ff88}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.04;background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1Ii8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI2EpIi8+PC9zdmc+');}
+.vignette{position:fixed;inset:0;pointer-events:none;z-index:998;background:radial-gradient(ellipse at center,transparent 60%,#000000cc 100%);}
+.header{padding:14px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;background:#0c0c0dd0;backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.logo{display:flex;gap:10px;align-items:center}
+.logo-icon{width:28px;height:28px;background:#1c1c1f;border:1px solid var(--border);border-radius:50%;display:grid;place-items:center;font-size:14px}
+.logo b{font-size:14px}
+.badge{font-size:10px;background:#1c1c1f;border:1px solid var(--border);border-radius:99px;padding:4px 10px;opacity:.6}
+.btn-top{background:var(--purple);color:#000;border:none;border-radius:99px;padding:8px 14px;font-weight:700;font-size:12px;cursor:pointer}
+.hero{padding:36px 18px 20px;max-width:520px}
+.online{display:inline-flex;gap:6px;align-items:center;background:#1a1a1d;border:1px solid var(--border);border-radius:99px;padding:6px 12px;font-size:11px;opacity:.8;margin-bottom:18px}
+.dot{width:6px;height:6px;background:#00ff88;border-radius:50%;box-shadow:0 0 8px #00ff88}
+.hero h1{font-size:42px;line-height:.95;letter-spacing:-1.5px;font-weight:700;margin-bottom:14px}
+.hero p{font-size:14px;opacity:.5;line-height:1.6;margin-bottom:18px;max-width:360px}
+.btns{display:flex;flex-direction:column;gap:10px;max-width:220px}
+.btn-primary{background:var(--purple);color:#000;border:none;border-radius:12px;padding:13px 16px;font-weight:700;font-size:13px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.btn-secondary{background:transparent;color:#fff;border:1px solid var(--border);border-radius:12px;padding:13px 16px;font-weight:600;font-size:13px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:22px 18px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-top:18px;max-width:520px}
+.stat b{font-size:22px;font-weight:700}
+.stat span{font-size:11px;opacity:.4;margin-left:4px}
+.wasted{position:fixed;inset:0;display:none;place-items:center;z-index:1000;background:#000000d0;backdrop-filter:blur(4px)}
+.wasted.show{display:grid}
+.wasted h2{font-family:'Space Grotesk';color:#ff2a2a;font-size:54px;font-weight:700;letter-spacing:8px;transform:rotate(-6deg);text-shadow:0 0 20px #ff2a2a;animation:wasted .4s ease}
+@keyframes wasted{0%{transform:scale(3) rotate(-10deg);opacity:0}100%{transform:scale(1) rotate(-6deg);opacity:1}}
+#console{padding:16px;max-width:520px;display:none}
+#console.show{display:block}
+.console-head{font-family:'JetBrains Mono';font-size:12px;opacity:.6;margin-bottom:14px}
+.search{display:flex;gap:8px;margin-bottom:14px}
+.search input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;color:#fff;outline:none;font-family:'JetBrains Mono';font-size:12px}
+.info{display:flex;gap:8px;margin-bottom:12px;font-size:11px}
+.info div{background:var(--card);border:1px solid var(--border);border-radius:99px;padding:6px 10px;display:flex;gap:6px;align-items:center}
+.endpoint-head{display:flex;justify-content:space-between;font-size:11px;opacity:.5;margin:16px 0 10px;font-family:'JetBrains Mono'}
+.list{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.row{display:flex;justify-content:space-between;align-items:center;padding:14px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:.15s}
+.row:hover{background:#1e1e22}
+.row:last-child{border:none}
+.row span{font-size:12px}
+.row small{font-size:11px;opacity:.4}
+.param{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-top:16px}
+.param label{font-size:11px;opacity:.5;font-family:'JetBrains Mono';display:block;margin-bottom:6px;margin-top:12px}
+.param label:first-child{margin-top:0}
+.param input{background:#0f0f10;border:1px solid var(--border);border-radius:10px;padding:12px;width:100%;color:#fff;outline:none;font-family:'JetBrains Mono';font-size:12px}
+.btn-run{width:100%;background:var(--purple);color:#000;border:none;border-radius:10px;padding:13px;font-weight:800;font-size:13px;margin-top:14px;cursor:pointer}
+.btn-clean{width:100%;background:transparent;color:#fff;border:1px solid var(--border);border-radius:10px;padding:11px;margin-top:8px;font-size:12px;cursor:pointer;opacity:.6}
+.response{margin-top:14px;background:#0f0f10;border:1px solid var(--border);border-radius:14px;padding:12px;font-family:'JetBrains Mono';font-size:11px}
+.response-head{display:flex;justify-content:space-between;margin-bottom:8px;font-size:11px}
+.ok{color:#00ff88}
+.copy{cursor:pointer;opacity:.5}
+pre{white-space:pre-wrap;word-break:break-all;opacity:.8;line-height:1.5;max-height:300px;overflow:auto}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="vignette"></div>
+
+<div id="wasted" class="wasted"><h2>WASTED</h2></div>
+
+<div class="header">
+<div class="logo">
+<div class="logo-icon">🍄</div>
+<div><b>dilznoelzHwa</b><span class="badge">v4.0.0</span></div>
+</div>
+<button class="btn-top" onclick="openConsole()">↗ Buka Console</button>
+</div>
+
+<div id="landing">
+<div class="hero">
+<div class="online"><div class="dot"></div> Online • @dilznoelzHwa</div>
+<h1>Ratusan API.<br>Satu request.</h1>
+<p>AI chat, downloader, image generation, pencarian, dan puluhan tools. Gratis, tanpa daftar, response JSON siap pakai.</p>
+<div class="btns">
+<button class="btn-primary" onclick="openConsole()">> Mulai di Console</button>
+<button class="btn-secondary" onclick="openConsole()">Lihat kode response →</button>
+</div>
+</div>
+
+<div class="stats">
+<div class="stat"><b>395</b><span>API</span></div>
+<div class="stat"><b>35</b><span>kategori</span></div>
+<div class="stat"><b>383</b><span>GET</span></div>
+<div class="stat"><b>12</b><span>POST</span></div>
+</div>
+</div>
+
+<div id="console">
+<div class="console-head">> dilznoelzHwa Console — Pilih endpoint, isi parameter, lalu jalankan langsung dari browser.</div>
+
+<div class="search">
+<input id="searchEnd" placeholder="🔍 Cari endpoint... (ex: preset alight motion)" oninput="filterEnd(this.value)" value="preset alight motion">
+<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:11px;opacity:.6">Free 3/1,000</div>
+</div>
+
+<div class="info">
+<div>🟢 Aktif</div>
+<div>2,349 request hari ini</div>
+<div style="color:var(--purple)">Hubungi dev</div>
+</div>
+
+<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;font-size:11px;margin-bottom:14px">
+<span>📄 Referensi response</span><span>11 kode →</span>
+</div>
+
+<div class="endpoint-head"><span>Endpoint</span><span>395 endpoints</span></div>
+<div class="list" id="endList">
+<div class="row" onclick="selectEnd('ai-chat')"><span>ai-chat</span><small>53 endpoints →</small></div>
+<div class="row" onclick="selectEnd('ai-generate')"><span>ai-generate</span><small>9 endpoints →</small></div>
+<div class="row" onclick="selectEnd('anime')"><span>anime</span><small>61 endpoints →</small></div>
+<div class="row" onclick="selectEnd('berita')"><span>berita</span><small>14 endpoints →</small></div>
+<div class="row" onclick="selectEnd('bypass')"><span>bypass</span><small>1 endpoint →</small></div>
+<div class="row" onclick="selectEnd('saweria')"><span>saweria</span><small>40 endpoints →</small></div>
+<div class="row" style="background:#211d33;border:1px solid #9b8cff50"><span>🔍 preset alight motion</span><small>8 endpoints →</small></div>
+</div>
+
+<div class="param" id="paramBox">
+<label>FREE • keyword pencarian</label>
+<input id="keyword" value="preset alight motion">
+<label>count — Jumlah hasil (default 10, maks 30)</label>
+<input id="count" value="10" type="number">
+<button class="btn-run" onclick="runAPI()">Jalankan</button>
+<button class="btn-clean" onclick="clean()">Bersihkan</button>
+
+<div class="response" id="responseBox">
+<div class="response-head"><span class="ok">200 OK 1525ms application/json</span><span class="copy" onclick="copyRes()">copy</span></div>
+<pre id="jsonOut">{
+  "status": "Klik Jalankan untuk fetch preset...",
+  "hint": "dilznoelzHwa • Synox Style"
+}</pre>
+</div>
+</div>
+</div>
+
+<script>
+function openConsole(){
+document.getElementById('landing').style.display='none';
+document.getElementById('console').classList.add('show');
+window.scrollTo(0,0);
+// easter egg WASTED kyk video
+if(!localStorage.getItem('wasted')){
+setTimeout(()=>{
+let w=document.getElementById('wasted');
+w.classList.add('show');
+setTimeout(()=>w.classList.remove('show'),1200);
+localStorage.setItem('wasted','1');
+},400);
+}
+}
+
+function selectEnd(name){
+document.getElementById('searchEnd').value=name;
+filterEnd(name);
+}
+
+function filterEnd(q){
+let rows=document.querySelectorAll('.row');
+rows.forEach(r=>{
+if(q==='') r.style.display='flex';
+else r.style.display=r.innerText.toLowerCase().includes(q.toLowerCase())?'flex':'none';
+});
+}
+
+const mockPresets=[
+{id:"769376757262435927",desc:"😍 preset alight motion jedag jedug #alightmotion #edit #fyp",link_in_bio:"alight link in bio 😍 #alightmotion #edit",create_time:"2026-10-08T13:06:00Z",link:"https://alightcreative.com/am/share/preset1"},
+{id:"769376757262435928",desc:"🔥 preset alight motion viral #xyzbca #fyp",link_in_bio:"preset ada di bio",create_time:"2026-10-07T12:00:00Z",link:"https://drive.google.com/file/d/preset2"},
+{id:"769376757262435929",desc:"💜 negro angin preset #presetpp",link_in_bio:"link preset di komentar",create_time:"2026-10-06T10:00:00Z",link:"https://alightcreative.com/am/share/negroangin"}
+];
+
+function runAPI(){
+let kw=document.getElementById('keyword').value||'preset alight motion';
+let count=parseInt(document.getElementById('count').value)||10;
+let btn=document.querySelector('.btn-run');
+btn.innerText='⏳ Menjalankan...';
+btn.disabled=true;
+setTimeout(()=>{
+let data={
+status:true,
+creator:"@dilznoelzHwa",
+endpoint:"/api/search/preset-alight-motion",
+query:kw,
+count:count,
+results:mockPresets.slice(0,count).map(p=>({
+id:p.id,
+desc:p.desc,
+link_in_bio:p.link_in_bio,
+create_time:p.create_time,
+alight_link:p.link,
+thumbnail:`https://p16-sign-sg.tiktokcdn.com/obj/tos-alisg-p-0037/o8a9c0e7b1_common?x-expires=999999`,
+stats:{views:Math.floor(Math.random()*90000)+1000,likes:Math.floor(Math.random()*5000)+100}
+}))
+};
+document.getElementById('jsonOut').innerText=JSON.stringify(data,null,2);
+btn.innerText='Jalankan';
+btn.disabled=false;
+},900);
+}
+
+function clean(){
+document.getElementById('jsonOut').innerText='{\n  "status": "cleared"\n}';
+}
+
+function copyRes(){
+navigator.clipboard.writeText(document.getElementById('jsonOut').innerText);
+alert('JSON copied! dilznoelzHwa');
+}
+
+// auto run kyk video
+setTimeout(()=>{if(document.getElementById('searchEnd').value.includes('preset')) runAPI();},1500);
+</script>
+</body>
+</html>
