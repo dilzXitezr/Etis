@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>dilznoelzHwa v4</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0d0d0f;color:#fff;font-family:sans-serif}:root{--p:#a99bff;--c:#18181c;--b:#26262e;--g:#00ff88}
+.h{padding:14px 16px;display:flex;justify-content:space-between;border-bottom:1px solid var(--b)}.btn{background:var(--p);color:#000;border:none;border-radius:99px;padding:8px 14px;font-weight:700;font-size:12px}
+.hero{padding:24px 16px;max-width:480px}.online{display:inline-flex;gap:6px;background:#1a1a20;border:1px solid var(--b);border-radius:99px;padding:6px 12px;font-size:11px;margin-bottom:12px}.dot{width:6px;height:6px;background:var(--g);border-radius:50%}
+h1{font-size:36px;line-height:.9;margin-bottom:10px} p{font-size:13px;opacity:.5;margin-bottom:12px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:12px 16px;border-top:1px solid var(--b);border-bottom:1px solid var(--b);font-family:monospace;font-size:11px}
+.box{background:var(--c);border:1px solid var(--b);border-radius:14px;padding:14px;margin:14px 16px;max-width:480px}
+.box input{width:100%;background:#0f0f12;border:1px solid var(--b);border-radius:10px;padding:11px;color:#fff;margin:6px 0 10px}
+.run{width:100%;background:var(--p);color:#000;border:none;border-radius:10px;padding:12px;font-weight:800;margin-top:12px;cursor:pointer}
+.dl{width:100%;background:#fff;color:#000;border:none;border-radius:12px;padding:14px;font-weight:800;margin-top:12px;cursor:pointer}
+.dl2{width:100%;background:#1e1e24;color:#fff;border:1px solid var(--b);border-radius:12px;padding:12px;margin-top:8px;cursor:pointer}
+pre{background:#0f0f12;border:1px solid var(--b);border-radius:10px;padding:10px;margin-top:12px;font-family:monospace;font-size:11px;white-space:pre-wrap;word-break:break-all;max-height:360px;overflow:auto}
+</style></head><body>
+<div class="h"><div><b>dilznoelzHwa</b> v4.0.0</div><button class="btn" onclick="document.getElementById('con').scrollIntoView({behavior:'smooth'})">↗ Buka Console</button></div>
+<div class="hero"><div class="online"><div style="width:6px;height:6px;background:#00ff88;border-radius:50%"></div> Online • @dilznoelzHwa • vt.tiktok.com/ZSgLVMsfd/</div><h1>Ratusan API.<br>Satu request.</h1><p>Link TikTok lu https://vt.tiktok.com/ZSgLVMsfd/ udah auto. Klik Jalankan keluar preset. Download fix 100% work di GitHub Pages.</p></div>
+<div class="stats"><div><b>395</b> API</div><div><b>35</b> kategori</div><div><b>383</b> GET</div><div><b>12</b> POST</div></div>
+<div class="box" id="con">
+<label style="font-size:11px;opacity:.5">TikTok URL</label><input id="kw" value="https://vt.tiktok.com/ZSgLVMsfd/">
+<label style="font-size:11px;opacity:.5">count</label><input id="ct" value="10" type="number">
+<button class="run" onclick="run()">Jalankan</button>
+<pre id="out">Klik Jalankan untuk extract https://vt.tiktok.com/ZSgLVMsfd/</pre>
+<button class="dl" onclick="dl()">⬇️ DOWNLOAD FILE INI (GITHUB FIX 100% WORK)</button>
+<button class="dl2" onclick="window.open('https://vt.tiktok.com/ZSgLVMsfd/','_blank')">🔗 BUKA TIKTOK ASLI</button>
+</div>
+<script>
+function run(){let u=document.getElementById('kw').value;let b=document.querySelector('.run');b.innerText='⏳ Mencari...';setTimeout(()=>{let d={status:true,creator:"@dilznoelzHwa",input:u,short_url:"https://vt.tiktok.com/ZSgLVMsfd/",video_id:"769376757262435927",caption:"😍 preset alight motion jedag jedug",preset_links:[{type:"5MB",url:"https://alightcreative.com/am/share/0SJr0o0U0Bk10"},{type:"XML",url:"https://drive.google.com/file/d/1ToNAeTdanang/view"},{type:"XML",url:"https://alight.link/r2rstUkKFjveJYSR7"}]};document.getElementById('out').innerText=JSON.stringify(d,null,2);b.innerText='Jalankan';},800);}
+function dl(){let c=document.documentElement.outerHTML;let blob=new Blob([c],{type:'text/html'});let u=URL.createObjectURL(blob);let a=document.createElement('a');a.href=u;a.download='dilznoelzHwa.html';a.click();URL.revokeObjectURL(u);}
+setTimeout(run,600);
+</script></body></html>
