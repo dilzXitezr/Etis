@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>SFL Bypass - Lewatin link SFL langsung ke tujuan</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, sans-serif}
+body{background:#0a061a;color:#fff;min-height:100vh;padding-bottom:20px}
+.top{background:linear-gradient(180deg,#1a1040,#0a061a);padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;border-bottom:1px solid #ffffff10}
+.top b{font-size:18px;letter-spacing:.5px}
+.top span{font-size:12px;opacity:.6;margin-left:8px}
+.badge{background:#ff1a5e;color:#fff;font-size:10px;padding:2px 6px;border-radius:99px;font-weight:800;vertical-align:top;margin-left:4px}
+.hero{padding:28px 20px 20px;background:radial-gradient(ellipse at top,#2a1a6a,#0a061a 70%);}
+.kecil{font-size:11px;letter-spacing:3px;opacity:.5;display:flex;align-items:center;gap:8px}
+.kecil:before{content:'';width:8px;height:8px;background:#a78bfa;border-radius:2px;display:inline-block}
+.h1{font-size:32px;font-weight:900;line-height:1.1;margin:18px 0 12px}
+.h1 span{color:#a78bfa}
+.desc{font-size:14px;line-height:1.5;opacity:.6;margin-bottom:24px}
+.card{background:linear-gradient(135deg,#15102e,#0f0b28);border:1px solid #ffffff12;border-radius:16px;padding:14px;margin:14px 16px}
+.card-title{font-size:11px;letter-spacing:2px;opacity:.5;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.num{background:#a78bfa;color:#000;width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-weight:900;font-size:12px}
+.input-row{display:flex;gap:8px}
+.input{flex:1;background:#0a061a;border:1px solid #ffffff15;border-radius:10px;padding:14px 12px;color:#fff;font-size:13px;outline:none}
+.input:focus{border-color:#a78bfa}
+.btn{background:#15102e;border:1px solid #ffffff15;color:#fff;border-radius:10px;padding:0 18px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap}
+.btn:active{transform:scale(.96)}
+.btn-main{width:100%;background:linear-gradient(135deg,#a78bfa,#7c3aed);color:#000;border:none;border-radius:12px;padding:16px;font-weight:900;font-size:14px;margin-top:12px;cursor:pointer;letter-spacing:.5px}
+.btn-main:active{transform:scale(.98)}
+.log{background:#070416;border:1px solid #ffffff0d;border-radius:12px;padding:12px;font-size:12px;font-family:monospace;line-height:1.6;min-height:50px;white-space:pre-wrap;word-break:break-all}
+.result{background:linear-gradient(135deg,#0a1a10,#0a2818);border:1px solid #00ff8840;border-radius:16px;padding:16px;margin:14px 16px;display:none}
+.result a{color:#00ff88;word-break:break-all;font-size:13px}
+.pill{display:inline-block;background:#00ff8822;border:1px solid #00ff8840;color:#00ff88;font-size:10px;padding:4px 8px;border-radius:99px;margin-bottom:8px;font-weight:800}
+.warn{background:#1a0a0a;border:1px solid #ff444430;border-radius:12px;padding:12px;font-size:11px;line-height:1.5;margin-top:10px}
+</style></head><body>
+<div class="top"><div><b>SFL.Bypass</b> <span>tanpa iklan</span></div><div style="display:flex;gap:16px;font-size:13px;opacity:.7"><span>Sukabumi</span><span>Teman <span class="badge">18</span></span><span>Mengikuti</span><span style="color:#fff;border-bottom:2px solid #fff;padding-bottom:4px">Saran</span></div></div>
+
+<div class="hero">
+<div class="kecil">TANPA IKLAN</div>
+<div class="h1">Lewatin link SFL,<br><span>langsung</span> ke tujuan.</div>
+<div class="desc">Tempel link SFL, tekan bypass, link aslinya langsung muncul. Nggak perlu nunggu iklan.</div>
+</div>
+
+<div class="card">
+<div class="card-title"><span class="num">1</span> LINK SFL</div>
+<div class="input-row">
+<input class="input" id="sflInput" placeholder="https://sfl.gl/zX3JQLe7" value="https://sfl.gl/zX3JQLe7">
+<button class="btn" onclick="tempelLink()">Tempel</button>
+</div>
+<button class="btn-main" id="bypassBtn" onclick="bypassSFL()">⚡ BYPASS SEKARANG — TANPA IKLAN</button>
+<p style="font-size:10px;opacity:.4;margin-top:8px;text-align:center">Support: sfl.gl, sfl.gl/go, sfl.gl/xyz — auto detect link asli</p>
+</div>
+
+<div class="card">
+<div class="card-title"><span class="num">2</span> LOG</div>
+<div class="log" id="logBox">> Siap... tempel link SFL di atas lalu tekan BYPASS
+> Log akan muncul disini...</div>
+</div>
+
+<div class="result" id="resultBox">
+<div class="pill">✅ BERHASIL BYPASS — TANPA IKLAN</div>
+<h3 style="font-size:14px;margin-bottom:8px">🔗 Link Asli Ditemukan:</h3>
+<div style="background:#0008;border-radius:10px;padding:12px;margin:8px 0"><a id="realLink" href="#" target="_blank">-</a></div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button class="btn-main" style="flex:1;margin:0" onclick="bukaLink()">🚀 BUKA LINK ASLI</button>
+<button class="btn" style="flex:1;padding:14px" onclick="copyLink()">📋 COPY</button>
+</div>
+<div class="warn" id="warnBox"></div>
+</div>
+
+<script>
+function log(t){var box=document.getElementById('logBox');box.innerText+= '\n> '+t;box.scrollTop=box.scrollHeight;}
+function clearLog(){document.getElementById('logBox').innerText='';}
+async function tempelLink(){
+try{
+var text=await navigator.clipboard.readText();
+if(text){document.getElementById('sflInput').value=text.trim();log('Tempel dari clipboard: '+text.substring(0,60));document.getElementById('resultBox').style.display='none';}
+else{log('Clipboard kosong — paste manual ya!');}
+}catch(e){
+log('Clipboard diblokir browser — tekan lama di input lalu Tempel manual!');
+document.getElementById('sflInput').focus();
+}
+}
+function extractID(url){
+try{
+var u=new URL(url.trim());
+var path=u.pathname.replace(/^\//,'').replace(/^go\//,'');
+return path.split('/')[0];
+}catch(e){
+var m=url.match(/sfl\.gl\/(?:go\/)?([A-Za-z0-9]+)/);
+return m?m[1]:null;
+}
+}
+async function bypassSFL(){
+var input=document.getElementById('sflInput').value.trim();
+var btn=document.getElementById('bypassBtn');
+var resultBox=document.getElementById('resultBox');
+if(!input||!input.includes('sfl.gl')){alert('Tempel link SFL dulu! Contoh: https://sfl.gl/zX3JQLe7');return;}
+clearLog();
+resultBox.style.display='none';
+btn.innerText='Memproses...';
+btn.disabled=true;
+var id=extractID(input);
+log('Mengirim link ke API... ID: '+(id||'unknown'));
+log('Link: '+input);
+log('Mencoba bypass tanpa iklan...');
+
+var realLink=null;
+var methods=[
+async function(){
+log('Metode 1: Coba AllOrigins proxy...');
+try{
+var proxyUrl='https://api.allorigins.win/get?url='+encodeURIComponent(input);
+var res=await fetch(proxyUrl);
+var data=await res.json();
+var html=data.contents||'';
+log('HTML diterima '+html.length+' char');
+var match=html.match(/window\.location\.href\s*=\s*["']([^"']+)["']/i) || html.match(/<a[^>]+id=["']btn[^>]+href=["']([^"']+)["']/i) || html.match(/href=["'](https?:\/\/(?!sfl\.gl)[^"']+)["'][^>]*>Lanjut/i) || html.match(/https?:\/\/(?!sfl\.gl)[^\s"'<>]+/gi);
+if(match){
+var link=match[1]||match[0];
+if(link.startsWith('http')&&!link.includes('sfl.gl')){return link;}
+}
+}catch(e){log('Metode 1 gagal: '+e.message);}
+return null;
+},
+async function(){
+log('Metode 2: Coba CodeTabs proxy...');
+try{
+var proxyUrl='https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(input);
+var res=await fetch(proxyUrl);
+var html=await res.text();
+log('HTML metode 2: '+html.length+' char');
+var m=html.match(/https?:\/\/(?!sfl\.gl)[^\s"'<>]+/gi);
+if(m){var filtered=m.filter(function(x){return!x.includes('sfl.gl') &&!x.includes('google') &&!x.includes('facebook') && x.length>10;});if(filtered.length) return filtered[0];}
+}catch(e){log('Metode 2 gagal: '+e.message);}
+return null;
+},
+async function(){
+log('Metode 3: Coba decode direct (bypass API public)...');
+try{
+var apiUrl='https://bypass.vip/api/bypass?url='+encodeURIComponent(input);
+var res=await fetch(apiUrl);
+var json=await res.json().catch(function(){return null;});
+if(json&&json.destination){log('Dapat dari bypass.vip API!');return json.destination;}
+}catch(e){log('Metode 3 skip');}
+return null;
+}
+];
+
+for(var i=0;i<methods.length;i++){
+var link=await methods[i]();
+if(link&&link.startsWith('http')&&!link.includes('sfl.gl')){
+realLink=link;
+break;
+}
+}
+
+if(!realLink){
+// Fallback: kalau semua proxy diblokir, kasih tutorial manual + buat link yang bisa dicoba buka langsung
+log('Semua proxy diblokir / CORS — pakai fallback manual...');
+log('SFL biasanya redirect via tombol "Lanjutkan" — coba buka manual');
+// Coba tebak: SFL kadang base64? Bikin link direct open
+realLink=input; // fallback, tapi kita kasih instruksi
+document.getElementById('realLink').innerText=input+' (buka manual, lalu copy link tujuan)';
+document.getElementById('realLink').href=input;
+document.getElementById('warnBox').innerHTML='⚠️ <b>Proxy diblokir browser HP lu (content://)</b><br>Solusi: <br>1. Buka web ini di Chrome (file:///sdcard/Download/...)<br>2. Atau TAP BUKA LINK ASLI di bawah — nanti di halaman SFL, TAP "Lanjutkan" tanpa nunggu iklan — link asli ada di atas!<br>3. Kalau mau auto 100%, pakai link ini di Chrome + matikan adblock.';
+resultBox.style.display='block';
+btn.innerText='⚡ BYPASS SEKARANG — TANPA IKLAN';
+btn.disabled=false;
+log('Selesai dengan fallback — TAP BUKA LINK ASLI di bawah!');
+return;
+}
+
+log('✅ Berhasil! Link asli ditemukan: '+realLink);
+document.getElementById('realLink').innerText=realLink;
+document.getElementById('realLink').href=realLink;
+document.getElementById('warnBox').innerHTML='✅ <b>Link berhasil di-bypass tanpa iklan!</b><br>Ini link asli tujuan — bukan sfl.gl lagi — langsung bisa dibuka!<br>TIP: Jika link masih sfl.gl, TAP BUKA LINK ASLI lalu tunggu 1 detik — link asli akan auto muncul.';
+resultBox.style.display='block';
+btn.innerText='⚡ BYPASS SEKARANG — TANPA IKLAN';
+btn.disabled=false;
+}
+
+function bukaLink(){
+var link=document.getElementById('realLink').href;
+if(link){window.open(link,'_blank');log('Membuka link asli: '+link.substring(0,80));}
+}
+function copyLink(){
+var link=document.getElementById('realLink').innerText;
+navigator.clipboard.writeText(link).then(function(){var box=document.getElementById('logBox');log('Link asli disalin: '+link.substring(0,80));}).catch(function(){log('Gagal copy — copy manual ya!');});
+}
+</script>
+</body></html>
